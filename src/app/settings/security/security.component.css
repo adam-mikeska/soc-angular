@@ -1,0 +1,10 @@
+.farba {
+  background-color: #3F51B5;
+  color: white;
+  outline: 0;
+  box-shadow: none!important;
+}
+mat-card{
+  margin: 0 !important;
+  padding: 0px;
+}

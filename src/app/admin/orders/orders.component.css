@@ -1,0 +1,17 @@
+.akcie {
+  font-size: 23px;
+  vertical-align: bottom;
+  cursor: pointer;
+}
+
+.mat-column-select{
+  flex: 0 0 10%;
+}
+.mat-column-id{
+  flex: 0 0 15%;
+}
+
+.search-icon {
+  font-size: 17px;
+}
+

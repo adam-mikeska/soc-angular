@@ -1,0 +1,194 @@
+<p class="h2 text-center">Order n.{{data.id}}</p>
+<hr>
+<div class="row">
+  <div class="col-lg-6">
+    <p class="h3 ml-1">Order info</p>
+    <table class="table ">
+      <tbody>
+      <tr>
+        <th>Order id:</th>
+        <td>{{order?.id}}</td>
+      </tr>
+      <tr>
+        <th>Order date:</th>
+        <td>{{order?.created}}</td>
+      </tr>
+      <tr>
+        <th>Delivery:</th>
+        <td>{{order?.cart_orderDelivery.delivery.split("_").join(" ")}}</td>
+      </tr>
+      <tr>
+        <th>Payment:</th>
+        <td>{{order?.cart_orderPayment.payment.split("_").join(" ")}}</td>
+      </tr>
+      <tr>
+        <th>Order Status:</th>
+        <td><p
+          [ngClass]="{'paid':order?.orderState==='PAID','processing':order?.orderState==='PROCESSING','completed':order?.orderState==='COMPLETED','refunded':order?.orderState==='REFUNDED','CANCELED':order?.orderState==='CANCELED','shipped':order?.orderState==='SHIPPED','awaiting_payment':order?.orderState==='AWAITING_PAYMENT'}">{{order?.orderState.split("_").join(" ")}}</p>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <p class="h3 ml-1 mt-3">Delivery/Contact informations</p>
+    <table class="table">
+      <tbody>
+      <tr>
+        <th>Customer:</th>
+        <td>{{order?.name}}</td>
+      </tr>
+      <tr>
+        <th>Email:</th>
+        <td>{{order?.email}}</td>
+      </tr>
+      <tr>
+        <th>Tel. number:</th>
+        <td>{{order?.telNumber}}</td>
+      </tr>
+      <tr>
+        <th>Country:</th>
+        <td>{{order?.country}}</td>
+      </tr>
+      <tr>
+        <th>City:</th>
+        <td>{{order?.city}}</td>
+      </tr>
+      <tr>
+        <th>Address:</th>
+        <td>{{order?.address}}</td>
+      </tr>
+      <tr>
+        <th>Postal code:</th>
+        <td>{{order?.postalCode}}</td>
+      </tr>
+      <tr *ngIf="order?.note">
+        <th>Note:</th>
+        <td>{{order?.note}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-lg-6">
+    <p class="h3 ml-1">Order items</p>
+    <hr>
+    <div class="smlit">
+      <div class="row cart-detail" *ngFor="let orderItem of order?.orderItems;let i=index">
+        <div class="col-lg-2 col-sm-2 col-2 cart-detail-img">
+          <a [routerLink]="['/product/'+orderItem.productOption.product.title]+'/'+orderItem.productOption.underTitle">
+            <img style="cursor: pointer"
+                 [src]="apiUrl+'products/image/'+orderItem.productOption.product.title+'/'+orderItem.productOption.underTitle+'/'+orderItem.productOption.productImages[0].image"></a>
+        </div>
+        <div class="col-lg-3 col-sm-3 col-3 cart-detail-product">
+          <a
+            [routerLink]="['/product/'+orderItem?.productOption.product.title]+'/'+orderItem?.productOption?.underTitle">
+            <p>{{orderItem.productOption.product.title}}
+              - {{orderItem.productOption.underTitle}}</p></a>
+          <p *ngIf="orderItem.productOption.product.brand" style="font-size: 12px;color: #535353">Brand
+            : {{orderItem?.productOption.product.brand.name}}</p>
+          <p style="font-size: 12px;color: #535353">Size : {{orderItem.productSize}}</p>
+        </div>
+        <div class="col-lg-3 col-sm-3 col-3 cart-detail-product"><span
+          class="count"> Qty x {{orderItem.quantity}}</span>
+        </div>
+        <div class="col-lg-4 col-sm-4 col-4 cart-detail-product">
+          <span
+            class="price">  {{((order?.coupon && order?.coupon.discountType === 'PERCENTAGE' ? (orderItem.price / 100) * (100 - order?.coupon.discount) : (orderItem.price)) | number : '1.2-2')}}
+            €</span>
+          <br>
+          <span *ngIf="order?.coupon && order?.coupon.discountType==='PERCENTAGE'"
+                class="price fr">  {{(orderItem.price) | number : '1.2-2' }} €</span>
+          <p
+            class="priceWW">  {{(order?.coupon && order?.coupon.discountType === 'PERCENTAGE' ? ((orderItem?.price / orderItem?.quantity) / 100) * (100 - order?.coupon.discount) : (orderItem?.price / orderItem?.quantity)) | number : '1.2-2' }}
+            €/1</p>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row cart-detail1 mb-2">
+      <div class="col-lg-2 col-sm-2 col-2 cart-detail-img1">
+        <i class="fas fa-credit-card ml-4" style="font-size: 21px"></i>
+      </div>
+      <div class="col-lg-6 col-sm-6 col-6 cart-detail-product1">
+        <a>
+          <p>{{order?.cart_orderPayment.payment.split("_").join(" ")}}</p></a>
+      </div>
+      <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1 mb-4">
+        <a>
+          <span
+            class="price">  {{order?.cart_orderPayment?.price === 0 ? 'FREE' : (order?.cart_orderPayment?.price  | number : '1.2-2') + ' €' }}</span>
+        </a>
+      </div>
+    </div>
+    <div class="row cart-detail1 mb-4">
+      <div class="col-lg-2 col-sm-2 col-2 cart-detail-img1">
+        <i class="fas fa-truck ml-4" style="font-size: 21px"></i>
+      </div>
+      <div class="col-lg-6 col-sm-6 col-6 cart-detail-product1">
+        <a>
+          <p>{{order?.cart_orderDelivery.delivery.split("_").join(" ")}}</p>
+        </a>
+      </div>
+      <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+        <a>
+          <span
+            class="price">  {{order?.cart_orderDelivery?.price === 0 ? 'FREE' :( order?.cart_orderDelivery?.price  | number : '1.2-2') + ' €' }}</span>
+        </a>
+      </div>
+    </div>
+    <hr *ngIf="order?.coupon" style="margin-top: 25px">
+    <div *ngIf="order?.coupon" class="row cart-detail1">
+      <div class="col-lg-2 col-sm-2 col-2 cart-detail-img1">
+        <i class="fas fa-gift" style="font-size: 21px;margin-left: 21px"></i>
+      </div>
+      <div class="col-lg-6 col-sm-6 col-6 cart-detail-product1">
+        <a>
+          <p> Coupon - {{order?.coupon.code}}</p></a>
+      </div>
+      <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+        <a>
+                  <span
+                    class="price"> {{ (!order?.coupon.discount ? '' : '-' + (order?.coupon.discount | number : '1.2-2')) + ' ' + (order?.coupon.discountType === 'PERCENTAGE' ? '%' : (order?.coupon.discountType === 'TOTAL' ? "€" : "FREE DELIVERY"))}}</span></a>
+      </div>
+    </div>
+    <hr style="margin-top: 25px">
+    <div
+      class="row cart-detail1 {{order?.coupon && order?.coupon.discountType==='PERCENTAGE' && order?.totalPrice>0 || order?.coupon && order?.coupon.discountType==='TOTAL' && order?.totalPrice>0 ? 'mb-3' : ''}}">
+      <div class="col-lg-2 col-sm-2 col-2 cart-detail-img1">
+
+      </div>
+      <div class="col-lg-6 col-sm-6 col-6 cart-detail-product1">
+        <a>
+          <p>Total price without tax: </p></a>
+      </div>
+      <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+        <a>
+                  <span
+                    class="price">  {{((order?.totalPrice / 120) * 100  | number : '1.2-2') }} €</span>
+          <br>
+          <span *ngIf="order?.coupon && order?.coupon.discountType==='PERCENTAGE' && order?.totalPrice>0 " class="price fr"> {{((((((order?.totalPrice/(100-order?.coupon.discount))*100)-((order?.cart_orderPayment.price/(100 - order?.coupon.discount)) * 100)-((order?.cart_orderDelivery.price/(100 - order?.coupon.discount)) * 100)+order?.cart_orderDelivery.price+order?.cart_orderPayment.price)/ 120)*100) | number : '1.2-2')+' €' }}</span>          <span *ngIf="order?.coupon && order?.coupon.discountType==='TOTAL' && order?.totalPrice>0 "
+                class="price fr"> {{(((order?.totalPrice + order?.coupon.discount) / 120) * 100 | number : '1.2-2') + ' €' }}</span>
+        </a>
+      </div>
+    </div>
+    <div class="row cart-detail1 mb-5">
+      <div class="col-lg-2 col-sm-2 col-2 cart-detail-img1">
+
+      </div>
+      <div class="col-lg-6 col-sm-6 col-6 cart-detail-product1">
+        <a>
+          <p>Total price: </p></a>
+      </div>
+      <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+        <a>
+          <span class="price">  {{((order?.totalPrice)  | number : '1.2-2') }} €</span>
+          <br>
+          <span *ngIf="order?.coupon && order?.coupon.discountType==='PERCENTAGE' && order?.totalPrice>0"
+                class="price fr"> {{(((order?.totalPrice / (100 - order?.coupon.discount)) * 100)-((order?.cart_orderDelivery.price/(100 - order?.coupon.discount)) * 100)-((order?.cart_orderPayment.price/(100 - order?.coupon.discount)) * 100)+order?.cart_orderPayment.price+order?.cart_orderDelivery.price| number : '1.2-2') + ' €' }}</span>
+          <span *ngIf="order?.coupon && order?.coupon.discountType==='TOTAL' && order?.totalPrice>0"
+                class="price fr"> {{((order?.totalPrice + order?.coupon.discount)  | number : '1.2-2') + ' €' }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,85 @@
+<mat-card style="margin-bottom:2em;">
+  <div class="cntr mb-3">
+    <p style="font-size: 30px;margin-top: 10px;margin-bottom: 15px">Roles</p>
+    <div>
+      <button type="button"
+              *ngIf="user.role?.permissions.includes('create_role') || user.role?.permissions.includes('*')"
+              mat-raised-button class="ml-auto" (click)="createRole()"><i class="fas fa-plus mr-1"></i> Create role
+      </button>
+    </div>
+  </div>
+  <mat-accordion>
+    <mat-expansion-panel
+      [disabled]="!user?.role?.permissions.includes('update_role') && !user?.role?.permissions.includes('*')"
+      *ngFor="let role of roles;let i=index">
+      <mat-expansion-panel-header>
+        <button type="button"
+                *ngIf="!user.role.permissions.includes('*') && user.role.permissions.includes('delete_role') && !user.role.permissions.includes('update_role') && role.name!=='OWNER' && role.name!=='USER'"
+                (click)="confirmDelete(role.id)" mat-icon-button class="small ml-auto mr-2">
+          <mat-icon color="warn">delete_outline</mat-icon>
+        </button>
+        <mat-panel-title [ngStyle]="{'color':role?.color}">
+          <i *ngIf="role.name==='OWNER'" class="fas fa-crown mr-2"></i><i *ngIf="role.name!=='OWNER'"
+                                                                          class="fas fa-user mr-2"></i>{{role.name}}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{role.permissions}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <form #f="ngForm" (ngSubmit)="f.form.valid && updateRole(role)">
+        <mat-form-field class="w-100">
+          <mat-label>Role</mat-label>
+          <input [disabled]="role.name==='USER' || role.name==='OWNER'" (keydown.space)="$event.preventDefault();"
+                 name="name{{i}}" id="name{{i}}" matInput type="text"
+                 [(ngModel)]="role.name"
+                 #name="ngModel"
+                 [ngClass]="{ 'is-invalid': f.submitted && name.invalid }"
+                 maxlength="255"
+                 required>
+          <mat-error *ngIf="name.errors?.required">Name is required</mat-error>
+          <mat-error *ngIf="name.errors?.maxlength">Max length exceeded</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-100">
+          <mat-label>Color</mat-label>
+          <input [(colorPicker)]="role.color" [disabled]="role.name==='OWNER' || role.name==='USER'" name="color{{i}}"
+                 id="color{{i}}" matInput type="text"
+                 [(ngModel)]="role.color"
+                 #color="ngModel"
+                 maxlength="255">
+          <mat-error *ngIf="color.errors?.required">Color is required</mat-error>
+          <mat-error *ngIf="color.errors?.maxlength">Max length exceeded</mat-error>
+        </mat-form-field>
+        <p class="example-margin mb-3 h1">Permissions</p>
+        <div *ngFor="let option of permissions">
+          <p class="h2 ml-3 mt-3 mb-3" *ngIf="option.name==='Everything'">Main</p>
+          <p class="h2 ml-3 mt-3 mb-3" *ngIf="option.name==='Display orders'">Orders</p>
+          <p class="h2 ml-3 mt-3 mb-3" *ngIf="option.name==='Display users'">Users</p>
+          <p class="h2 ml-3 mt-3 mb-3" *ngIf="option.name==='Display roles'">Roles</p>
+          <p class="h2 ml-3 mt-3 mb-3" *ngIf="option.name==='Display brands'">Brands</p>
+          <p class="h2 ml-3 mt-3 mb-3" *ngIf="option.name==='Display products'">Products</p>
+          <p class="h2 ml-3 mt-3 mb-3" *ngIf="option.name==='Display categories'">Categories</p>
+          <p class="h2 ml-3 mt-3 mb-3" *ngIf="option.name==='Display others'">Others</p>
+          <p class="h2 ml-3 mt-3 mb-3" *ngIf="option.name==='Add carousel'">Carousel</p>
+          <p class="h2 ml-3 mt-3 mb-3" *ngIf="option.name==='Add alert'">Alerts</p>
+          <p class="h2 ml-3 mt-3 mb-3" *ngIf="option.name==='Update payment'">Update price</p>
+          <mat-checkbox [disabled]="role.name==='OWNER' || role.name==='USER'" (change)="change(role,option.permission)"
+                        [checked]="role.permissions.includes(option.permission)" class="example-margin"
+                        color="primary">{{option.name}}</mat-checkbox>
+        </div>
+        <div class="row">
+          <button type="submit" [disabled]="!f.valid || role.name==='OWNER' || role.name==='USER'" mat-raised-button
+                  color="primary" class="mr-auto ml-4 mt-4 "><i
+            class="fas fa-save mr-1"></i> Update
+          </button>
+          <button (click)="confirmDelete(role.id)"
+                  *ngIf="role.name!=='USER' && role.name!=='OWNER' && user.role.permissions.includes('delete_role') || role.name!=='USER' && role.name!=='OWNER' && user.role.permissions.includes('*') "
+                  type="button" mat-raised-button color="warn" class="ml-auto ml-4 mt-4 mr-4 "><i
+            class="fas fa-trash mr-1"></i> Delete
+          </button>
+
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+</mat-card>

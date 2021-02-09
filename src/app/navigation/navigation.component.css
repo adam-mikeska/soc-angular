@@ -1,0 +1,176 @@
+.navbar {
+  -webkit-box-shadow: 0 4px 6px -6px #222;
+  -moz-box-shadow: 0 4px 6px -6px #222;
+  box-shadow: 0 4px 6px -6px #222;
+  min-height: 60px;
+  background-color: white;
+}
+.navbar-toggler,
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler-icon:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+.navbar-brand {
+  font-size: 25px;
+  margin-left: 10px;
+}
+.lft {
+  margin-right: 10px;
+}
+a {
+  font-size: 15px;
+}
+
+.nav-link{
+  cursor: pointer;
+}
+
+::ng-deep .mat-icon{
+  font-size: 20px;
+}
+.icns {
+  margin-right: 15px;
+}
+.dd {
+  margin-right: 10px;
+}
+
+@media only screen and (max-width:767.98px) {
+  .navbar {
+    min-height: 0;
+  }
+  .navbar-brand {
+    margin-left: 0;
+  }
+  .lft {
+    margin-left: 0;
+  }
+
+  .navbar{
+    position: relative;
+    left: 0;
+    right: 0;
+  }
+}
+
+::ng-deep .mat-badge-content {
+  background: #0683bd;
+ }
+
+.totalPrice {
+  font-size:15px;
+  color: #04456f;
+}
+.total-section p{
+  margin-bottom:20px;
+}
+
+.cart-detail{
+  padding:15px 0px;
+}
+.cart-detail-img img{
+  width:100%;
+  height:100%;
+  padding-left:15px;
+
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+.cart-detail-product p{
+  margin:0px;
+  color:#000;
+  font-weight:500;
+}
+.cart-detail .price{
+  font-size:14px;
+  margin-right:10px;
+  font-weight:500;
+  color:#04456f;
+}
+.cart-detail .count{
+  font-size:14px;
+  color: rgb(141, 137, 137);
+}
+.checkout{
+  margin:0 auto;
+  border-top:1px solid #d2d2d2;
+  padding-top: 15px;
+}
+
+.list {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 350px;
+  border-top: 1px solid #cdcdcd;
+  border-bottom: 1px solid #cdcdcd;
+  padding:10px 0px 10px 0px;
+  margin: 5px 0px 30px 0px;
+}
+.checkout .btn-primary{
+  border-radius:50px;
+  height:50px;
+}
+
+.dropdown-menu .ff:before{
+  content: " ";
+  position:absolute;
+  top:-20px;
+  right:70px;
+  border:10px solid transparent;
+  border-bottom-color:#fff;
+}
+.dropdown .hh .dropdown-menu{
+  border-radius: 3px;
+  padding:20px;
+  top:50px !important;
+  width:350px !important;
+  left:-250px !important;
+  box-shadow:0px 5px 30px black;
+}
+
+@media only screen and (max-width:1061px) {
+  .dropdown .hh .dropdown-menu{
+    left: -280px !important;
+  }
+  .dropdown-menu .ff:before{
+    right:40px;
+  }
+}
+
+.dropdown-item.active {
+  background-color: #0683bd;
+}
+.dropdown-item:focus {
+  background-color: #0683bd;
+}
+
+.dropdown-menu{
+   top:50px !important;
+   left:-65px !important;
+ }
+
+
+.btn{
+  border:0px;
+  margin:10px 0px;
+  box-shadow:none !important;
+}
+.checkout-button{
+  border-radius: 3px;
+  width: 220px;
+}
+
+
+.product-image{
+  width: 25px;
+  margin-right: 4px;
+}
+:host ::ng-deep .mat-autocomplete-panel {
+  max-height: 512px !important;
+}

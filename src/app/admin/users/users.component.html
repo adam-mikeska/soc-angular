@@ -1,0 +1,105 @@
+ <mat-card class="mb-2">
+  <p style="font-size: 30px;margin-top: 10px;margin-bottom: 15px">Users</p>
+  <div class="cntr ">
+    <mat-form-field style="max-width: 150px">
+      <mat-icon class="search-icon" matPrefix>search</mat-icon>
+      <input matInput (input)="update()" [(ngModel)]="search" style="margin-bottom: 2px">
+      <button *ngIf="search" matSuffix mat-icon-button type="button" (click)="search='';update()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <div>
+      <button mat-raised-button class="ml-1 mt-1"
+              *ngIf="currUser.role?.permissions.includes('asign_role') || currUser.role?.permissions.includes('*')"
+              (click)="asignRole()"><i class="fas fa-user-tag mr-1"></i> Asign role
+      </button>
+      <button mat-raised-button class="ml-1 mt-1"
+              *ngIf="currUser.role?.permissions.includes('lock_user') || currUser.role?.permissions.includes('*')"
+              (click)="openDialogBlockUser(null)"><i class="fas fa-ban mr-1"></i>Block/Unblock
+      </button>
+      <button mat-raised-button class="ml-1 mt-1"
+              *ngIf="currUser.role?.permissions.includes('send_email') || currUser.role?.permissions.includes('*')"
+              (click)="openDialogSendEmail()"><i class="fas fa-envelope mr-1"></i>Send mail
+      </button>
+    </div>
+  </div>
+  <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)"
+             [matSortActive]="sortActive"
+             [matSortDirection]="sortDirection">
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox color="primary" (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </mat-cell>
+
+    </ng-container>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="id"> Id</mat-header-cell>
+      <mat-cell *matCellDef="let user">
+        <span class="mobile-label">Id:</span>
+        <a (click)="openDialogViewUser(user)" href="javascript:void(0)">#{{user.id}}</a>
+        <div class="m-auto dada" *ngIf="user.nonLocked===false"><small>LOCKED</small></div>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="name"> Customer</mat-header-cell>
+      <mat-cell *matCellDef="let user">
+        <span class="mobile-label">Customer:</span>
+        <img class="mr-2" [src]="apiUrl+'api/image/'+ user.image"/>{{user.name}}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="email"> Email</mat-header-cell>
+      <mat-cell *matCellDef="let user">
+        <span class="mobile-label">Email:</span>
+        {{user.email}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="telNumber">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="telNumber">
+        <span class="mobile-label">Tel. number:</span>
+        Tel. number
+      </mat-header-cell>
+      <mat-cell *matCellDef="let user"><span class="mobile-label">Tel. number:</span>
+        {{user.telNumber}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="role">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="role.name"> Role</mat-header-cell>
+      <mat-cell *matCellDef="let user">
+        <span class="mobile-label">Role:</span>
+        <mat-chip-list>
+          <mat-chip [ngStyle]="{'background-color':user.role?.color}" selected>{{user.role?.name}}</mat-chip>
+        </mat-chip-list>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell [style.display]="currUser.role?.permissions.includes('update_user') || currUser.role?.permissions.includes('*') ?'' : 'none'" *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell [style.display]="currUser.role?.permissions.includes('update_user') || currUser.role?.permissions.includes('*') ?'' : 'none'" *matCellDef="let user">
+        <span class="mobile-label">Actions:</span>
+        <mat-icon (click)="openDialogEditUser(user)"
+                  class="mr-1 akcie" matTooltip="Edit user">edit
+        </mat-icon>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+  </mat-table>
+  <h3 class="text-center mt-5" *ngIf="dataSource.data.length===0">
+    No results
+  </h3>
+  <mat-paginator #paginator [pageSizeOptions]="[5,10,15,25,50,100,total]" [pageSize]="10" [length]="total"
+                 (page)="nextPage($event)"
+                 showFirstLastButtons>
+  </mat-paginator>
+
+</mat-card>

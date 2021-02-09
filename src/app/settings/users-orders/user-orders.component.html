@@ -1,0 +1,53 @@
+<mat-card>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12">
+        <p class="h2 text-center">Orders</p>
+        <hr>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <mat-table [dataSource]="dataSource" *ngIf=" dataSource.data.length>0">
+
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef>Order Id</mat-header-cell>
+          <mat-cell *matCellDef="let order">
+            <span class="mobile-label">Order ID:</span> <a (click)="openDialogViewOrder(order)" href="javascript:void(0)">#{{order.id}}</a>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="payment">
+          <mat-header-cell *matHeaderCellDef >Payment</mat-header-cell>
+          <mat-cell *matCellDef="let order">   <span class="mobile-label">Payment:</span>{{order.cart_orderPayment.payment.split("_").join(" ")}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="orderState">
+          <mat-header-cell *matHeaderCellDef > Order state</mat-header-cell>
+          <mat-cell *matCellDef="let order"> <span class="mobile-label">Order state:</span>
+            <div [ngClass]="{'paid':order.orderState==='PAID','processing':order.orderState==='PROCESSING','completed':order.orderState==='COMPLETED','refunded':order.orderState==='REFUNDED','CANCELED':order.orderState==='CANCELED','shipped':order.orderState==='SHIPPED','awaiting_payment':order.orderState==='AWAITING_PAYMENT'}">{{order.orderState.split("_").join(" ")}} </div>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="created">
+          <mat-header-cell *matHeaderCellDef > Date</mat-header-cell>
+          <mat-cell *matCellDef="let order">  <span class="mobile-label">Date:</span> {{order.created}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="totalPrice">
+          <mat-header-cell *matHeaderCellDef > Price</mat-header-cell>
+          <mat-cell *matCellDef="let order">  <span class="mobile-label">Price:</span>{{order.totalPrice | number : '1.2-2' }}€
+            <a *ngIf="order.cart_orderPayment.payment==='Paypal' && order.orderState==='AWAITING_PAYMENT' || order.cart_orderPayment.payment==='Online_bank_payment' && order.orderState==='AWAITING_PAYMENT'" [routerLink]="'/checkout/'+order.id">  <mat-icon class="ml-3 akcie"  matTooltip="Payment">credit_card</mat-icon></a>
+            <mat-icon *ngIf="order.orderState==='PROCESSING' || order.orderState==='AWAITING_PAYMENT'" (click)="openDialogCancelOrder(order.id)" class="ml-3 akcie"  matTooltip="Cancel order!" color="warn">close</mat-icon>
+          </mat-cell>
+
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+      </mat-table>
+      <h3 class="text-center" *ngIf=" dataSource.data.length===0">
+        No orders <i class="fas fa-frown fa-lg"></i>
+      </h3>
+      <mat-paginator #paginator [pageSizeOptions]="[1,5,10,15,25,50,100]" [pageSize]="5" [length]="total" (page)="nextPage()" showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </div>
+</mat-card>

@@ -1,0 +1,85 @@
+<div class="container-fluid hdr">
+  <div class="container">
+    <div style="padding-top: 65px">
+      <p class="h2">Search: {{params.search}}</p>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row mt-4 " *ngIf="categories">
+    <div *ngFor="let subcat of categories" class="col-4 col-xl-2 col-md-3 col-lg-2 col-sm-4 col-xs-4">
+      <div class="category">
+        <a class="category-under" [routerLink]="getLink(subcat)"><p class="p-2" style="margin-top: 1px;margin-left: 2px">{{wrd(subcat,subcat.name)}}</p><i
+          style="padding: 8.5px" class="ml-auto fas fa-angle-right"></i></a>
+      </div>
+    </div>
+  </div>
+  <mat-card class="mt-5 mb-1 sorthdr">
+    <div class="row">
+      <div class="col-xl-2">
+        <mat-form-field class="srtby" appearance="outline">
+          <mat-select (selectionChange)="setSortBy()" id="sortBy" matTooltip="Sort by"
+                      matNativeControl
+                      [(ngModel)]="params.sortBy"
+                      #sortb="ngModel"
+                      name="sortBy">
+            <mat-option value="" selected>Default</mat-option>
+            <mat-option value="price">Price</mat-option>
+            <mat-option value="soldTimes">Sold times</mat-option>
+            <mat-option value="addedInDate">Added in date</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <i (click)="params.sortBy? setDirection() : null" class="fas {{params.direction? 'fa-sort-amount-down-alt':'fa-sort-amount-up-alt'}} {{params.sortBy? 'fa-enabled':'fa-disabled'}} fa-lg" [matTooltip]="(params.direction?'Descending':'Ascending')"></i>
+      </div>
+      <div class="col-xl-2 d-flex">
+        <mat-form-field class="prce" appearance="outline">
+          <mat-label>Min. price</mat-label>
+          <input name="priceMin"  min="0" onkeydown="return event.keyCode !== 69 && event.keyCode !== 189;" onkeyup="if(priceMax.value && parseInt(this.value)>priceMax.value){ this.value =priceMax.value; return false; }"
+                 id="priceMin" matInput type="number"
+                 [(ngModel)]="params.minimumPrice" (change)="setMinPrice()"
+                 #priceMin="ngModel">
+        </mat-form-field>
+        <mat-form-field class="prce" appearance="outline">
+          <mat-label>Max. price</mat-label>
+          <input name="priceMax"  min="0" onkeydown="return event.keyCode !== 69 && event.keyCode !== 189"
+                 id="priceMax" matInput type="number" (change)="setMaxPrice()"
+                 [(ngModel)]="params.maximumPrice"
+                 #priceMax="ngModel">
+        </mat-form-field>
+      </div>
+      <mat-paginator showFirstLastButtons class="col-xl pgntr" [pageSizeOptions]="[10]" [length]="total" [pageIndex]="params.page" [pageSize]="params.size"
+                     (page)="nextPage($event)">
+      </mat-paginator>
+    </div>
+  </mat-card>
+  <div class="row" *ngIf="productOptions && categories">
+   <h1 class="mt-5 col-md-12 text-center" *ngIf="productOptions.length===0">No results</h1>
+    <div *ngFor="let productOption of productOptions" class="col-6 col-md-4 col-lg-3 mb-4">
+      <div class="card border-0">
+        <a [routerLink]="['/product/'+productOption.product.title]+'/'+productOption?.underTitle">
+          <img class="product-image"
+               [src]="apiUrl+'products/image/'+productOption.product.title+'/'+productOption.underTitle+'/'+productOption.productImages[0].image"
+               alt="">
+          <img *ngIf="productOption.productImages.length>1" class="product-image"
+               [src]="apiUrl+'products/image/'+productOption.product.title+'/'+productOption.underTitle+'/'+productOption.productImages[1].image"/>
+        </a>
+        <hr class="w-100 m-auto">
+        <div class="card-body">
+          <div class="d-flex">
+            <a style="color:black"
+               [routerLink]="['/product/'+productOption.product.title+'/'+productOption?.underTitle]">
+              <p class="card-title">{{productOption.product.title + ' - ' + productOption.underTitle}}</p>
+            </a>
+            <img class="logo" *ngIf="productOption?.product.brand"
+                 [src]=" apiUrl+'products/brands/image/'+productOption?.product.brand.image"/>
+          </div>
+          <div class="d-flex">
+            <p>{{productOption.price - productOption.discount | number : '1.2-2' }} €</p>
+            <p *ngIf="productOption.discount>0"
+               style="text-decoration: line-through;margin-left: auto">{{productOption.price | number : '1.2-2' }} €</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

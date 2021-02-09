@@ -1,0 +1,90 @@
+<mat-card>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12">
+        <p class="h2 text-center">Security</p>
+        <hr>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group row">
+          <label for="currentPassword" class="col-3 col-form-label">2 Factor Authentification</label>
+          <div class="col-8">
+            <mat-slide-toggle color="primary" (click)="update2FA(request2FA)" [(ngModel)]="is2FAenabled"></mat-slide-toggle>
+          </div>
+        </div>
+        <form #f="ngForm" (ngSubmit)="f.form.valid && updatePassword(request)">
+          <div class="form-group row">
+            <label for="currentPassword" class="col-3 col-form-label">Current password</label>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <mat-label>Password</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'"
+                       [(ngModel)]="request.currentPassword"
+                       #currentPassword="ngModel"
+                       id="currentPassword"
+                       name="currentPassword"
+                       autocomplete="on"
+                       maxlength="255"
+                       minlength="8"
+                       [autocomplete]="true"
+                       required>
+                <mat-error *ngIf="currentPassword.errors?.minlength">Minimal password size is 8</mat-error>
+                <mat-error *ngIf="currentPassword.errors?.required">Current password is required</mat-error>
+                <mat-icon *ngIf="request.currentPassword" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="newPassword" class="col-3 col-form-label">New password</label>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <mat-label>New password</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'"
+                       [(ngModel)]="request.newPassword"
+                       #newPassword="ngModel"
+                       id="newPassword"
+                       name="newPassword"
+                       required
+                       autocomplete="on"
+                       maxlength="255"
+                       [autocomplete]="true"
+                       minlength="8">
+                <mat-error *ngIf="newPassword.errors?.required">New password is required</mat-error>
+                <mat-error *ngIf="newPassword.errors?.minlength">Minimal password size is 8</mat-error>
+                <mat-icon *ngIf="request.newPassword" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="currentPassword" class="col-3 col-form-label">Repeat new password</label>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <mat-label>Repeat new password</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'"
+                       [(ngModel)]="request.repeatNewPassword"
+                       #repeatNewPassword="ngModel"
+                       id="repeatNewPassword"
+                       name="repeatNewPassword"
+                       autocomplete="on"
+                       required
+                       maxlength="255"
+                       [autocomplete]="true"
+                       pattern="{{ newPassword.value }}">
+                <mat-error *ngIf="repeatNewPassword.errors?.required">Please repeat new password</mat-error>
+                <mat-error *ngIf="repeatNewPassword.errors?.pattern">Passwords does not match</mat-error>
+                <mat-icon *ngIf="request.repeatNewPassword" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </mat-form-field> </div>
+            </div>
+          <div class="form-group row">
+            <div class="offset-4 col-8">
+              <button type="submit" mat-raised-button color="primary"><i class="fas fa-save mr-2"></i>Update password</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</mat-card>

@@ -1,0 +1,139 @@
+@import '~animate.css/animate.min.css';
+@import "~@fortawesome/fontawesome-free/css/all.css";
+/* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; }
+body { margin: 0}
+* {
+  font-family: 'Teko', sans-serif;
+  font-size: 13px;
+}
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+}
+
+button:focus {
+  outline: none !important;
+}
+
+.mat-button-focus-overlay {
+  background-color: transparent!important;
+}
+.right-aligned-header > .mat-content {
+  justify-content: space-between;
+}
+
+.mat-content > mat-panel-title, .mat-content > mat-panel-description {
+  flex: 0 0 auto;
+}
+.mat-button, .mat-raised-button{
+  border-radius: 3px !important;
+}
+
+mat-icon {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+.cdk-overlay-container {
+  position: fixed;
+  z-index: 10000;
+}
+.cdk-overlay-pane{
+  z-index: 10000 !important;
+}
+.mat-button.mat-primary,
+.mat-flat-button.mat-primary,
+.mat-raised-button.mat-primary,
+.mat-raised-button.mat-primary,
+.mat-mini-fab.mat-primary{
+  background-color: #0683bd;
+}
+
+.mat-icon.mat-primary{
+  color: #0683bd;
+}
+.mat-form-field.mat-focused .mat-form-field-ripple{
+  background-color: #0683bd;
+}
+.mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+  color: #0683bd;
+}
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: #0683bd;
+}
+
+.mat-checkbox-checked.mat-primary .mat-checkbox-background,.mat-checkbox-indeterminate.mat-primary .mat-checkbox-background {
+  background-color: #0aa0e7;
+}
+.processing {
+  color: white;
+  background-color: #13c6c6;
+  border-radius: 3px;
+  min-width: 30px;
+  width: 50%;
+  max-width: 100px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.completed {
+  color: white;
+  background-color: green;
+  border-radius: 3px;
+  width: 50%;
+  max-width: 100px;
+  min-width: 60px;
+  text-align: center;
+}
+.refunded {
+  color: white;
+  background-color: gray;
+  border-radius: 3px;
+  width: 50%;
+  max-width: 100px;
+  min-width: 60px;
+  text-align: center;
+}
+.CANCELED {
+  color: white;
+  background-color: gray;
+  border-radius: 3px;
+  width: 50%;
+  max-width: 100px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.shipped {
+  color: white;
+  background-color: orange;
+  border-radius: 3px;
+  width: 50%;
+  max-width: 100px;
+  min-width: 60px;
+  text-align: center;
+}
+.awaiting_payment {
+  color: white;
+  background-color: #c9bf07;
+  border-radius: 3px;
+  width: 50%;
+  max-width: 100px;
+  min-width: 60px;
+  text-align: center;
+}
+.paid {
+  color: white;
+  background-color: green;
+  border-radius: 3px;
+  width: 50%;
+  max-width: 100px;
+  min-width: 60px;
+  text-align: center;
+}
+

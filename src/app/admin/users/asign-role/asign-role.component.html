@@ -1,0 +1,57 @@
+<p class="h2 text-center">Asign role</p>
+<hr width="95%">
+<form #f="ngForm" (ngSubmit)="f.form.valid && asignRole(request)" name="form">
+  <div class="form-group row">
+    <label class="col-3 col-form-label">Users</label>
+    <div class="col-8">
+      <mat-form-field >
+        <mat-label>Users</mat-label>
+        <div class="scrollable">
+          <mat-chip-list #chipList [(ngModel)]="request.users" name="users"
+                         id="users">
+            <mat-chip *ngFor="let user of arr" [selectable]="selectable"
+                      [removable]="removable" (removed)="remove(user)">{{user}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input (input)="update()" matInput
+                   [formControl]="userCtrl"
+                   [matAutocomplete]="auto"
+                   [matChipInputFor]="chipList"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   [matChipInputAddOnBlur]="addOnBlur"
+                   (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <ng-container *ngFor="let user of filteredUsers ">
+              <mat-option *ngIf="!arr.includes(user)"  [value]="user">
+                {{ user }}
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+        </div>
+        <button matSuffix mat-icon-button type="button" (click)="allEmails()">
+          <mat-icon>select_all</mat-icon>
+        </button>
+        <button matSuffix mat-icon-button type="button" (click)="arr=[]">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-3 col-form-label">Role</label>
+    <div class="col-9">
+      <div class="row">
+      <div *ngFor="let role of roles;let i=index" class="col-sm-3">
+        <mat-checkbox [disabled]="isChecked && (request.roleName!=role)" (change)="onChange($event)"
+                      [value]="role" color="primary" type="checkbox" required> {{role}}
+        </mat-checkbox>
+      </div>
+      </div>
+    </div>
+  </div>
+    <button class="mt-2" type='submit' id="sendMail" mat-raised-button color="primary"
+            [disabled]="!f.valid || arr.length==0 || !request.roleName" ><i class="fas fa-user-tag mr-1"></i> Asign
+      role
+    </button>
+</form>

@@ -1,0 +1,54 @@
+<mat-drawer-container class="example-container mat-typography mt-1 animate slideInUp" autosize>
+  <mat-drawer #drawer mode="side" disableClose="true" opened="true">
+    <button mat-mini-fab color="primary" (click)="isExpanded = !isExpanded" class="tlacitko">
+      <mat-icon aria-label="Menu">menu</mat-icon>
+    </button>
+
+    <mat-nav-list>
+      <mat-list-item *ngIf="user.role?.permissions.includes('display_users') || user.role?.permissions.includes('*') " [routerLink]="['/admin/users']" [routerLinkActive]="['active']">
+        <mat-icon mat-list-icon>people</mat-icon>
+        <h4 mat-line *ngIf="isExpanded">Users</h4>
+      </mat-list-item>
+      <mat-list-item *ngIf="user.role?.permissions.includes('display_products') || user.role?.permissions.includes('*') " [routerLink]="['/admin/products']" [routerLinkActive]="['active']">
+        <mat-icon mat-list-icon>work</mat-icon>
+        <h4 mat-line *ngIf="isExpanded">Products</h4>
+      </mat-list-item>
+      <mat-list-item  *ngIf="user.role?.permissions.includes('display_orders') || user.role?.permissions.includes('*') "[routerLink]="['/admin/orders']" [routerLinkActive]="['active']">
+        <mat-icon mat-list-icon>shopping_cart</mat-icon>
+        <h4 mat-line *ngIf="isExpanded">Orders</h4>
+      </mat-list-item>
+      <mat-list-item  *ngIf="user.role?.permissions.includes('display_coupons') || user.role?.permissions.includes('*') " [routerLink]="['/admin/coupons']" [routerLinkActive]="['active']">
+        <mat-icon mat-list-icon>attach_money</mat-icon>
+        <h4 mat-line *ngIf="isExpanded">Coupons</h4>
+      </mat-list-item>
+      <mat-list-item *ngIf="user.role?.permissions.includes('display_roles') || user.role?.permissions.includes('*') " [routerLink]="['/admin/roles']" [routerLinkActive]="['active']">
+        <mat-icon mat-list-icon>shield</mat-icon>
+        <h4 mat-line *ngIf="isExpanded">Roles</h4>
+      </mat-list-item>
+      <mat-list-item *ngIf="user.role?.permissions.includes('display_brands') || user.role?.permissions.includes('*') " [routerLink]="['/admin/brands']" [routerLinkActive]="['active']">
+        <mat-icon mat-list-icon>label</mat-icon>
+        <h4 mat-line *ngIf="isExpanded">Brands</h4>
+      </mat-list-item>
+      <mat-list-item *ngIf="user.role?.permissions.includes('display_categories') || user.role?.permissions.includes('*')" [routerLink]="['/admin/categories']" [routerLinkActive]="['active']">
+        <mat-icon mat-list-icon>topic</mat-icon>
+        <h4 mat-line *ngIf="isExpanded">Categories</h4>
+      </mat-list-item>
+      <mat-list-item *ngIf="user.role?.permissions.includes('display_others') || user.role?.permissions.includes('*')" [routerLink]="['/admin/others']" [routerLinkActive]="['active']">
+        <mat-icon mat-list-icon>personal_video</mat-icon>
+        <h4 mat-line *ngIf="isExpanded">Others</h4>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-drawer>
+
+  <div class="example-sidenav-content ml-1 mt-1 p-1" >
+    <ol class="breadcrumb">
+      <li *ngFor="let breadcrumb of breadcrumbs;let i=index"
+          class="breadcrumb-item">
+        <a [routerLink]="[breadcrumb.url]"   [ngClass]="i!==breadcrumbs.length-1 ? 'breadcrumb-item': 'grey'">
+          {{ breadcrumb.label }}
+        </a>
+      </li>
+    </ol>
+    <router-outlet></router-outlet>
+  </div>
+</mat-drawer-container>

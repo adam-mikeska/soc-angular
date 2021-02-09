@@ -1,0 +1,46 @@
+<p class="h2 text-center">Add carousel</p>
+<hr width="95%">
+<form #f="ngForm" (ngSubmit)="f.form.valid && addCarousel(request,image)">
+  <div class="form-group row">
+    <div class="col-12">
+      <mat-form-field class="w-100">
+        <mat-label>Text</mat-label>
+        <input [(ngModel)]="request.text" matInput type="text"
+               #text="ngModel"
+               id="text"
+               name="text"
+               required>
+        <mat-error *ngIf="text.errors?.required">Set text.</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-12">
+      <mat-form-field class="w-100">
+        <mat-label>Link</mat-label>
+        <input [(ngModel)]="request.link" matInput type="text"
+               #link="ngModel"
+               id="link"
+               name="link"
+               required>
+        <mat-error *ngIf="link.errors?.required">Set text.</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-12 text-center" *ngIf="!image">
+      <label for="file-upload" class="custom-file-upload  mt-3">
+        <i class="fas fa-cloud-upload-alt"></i> Select image
+      </label>
+      <input  id="file-upload" type="file" name="file-upload" (change)="selectFile($event)"
+              accept="image/*"/>
+    </div>
+    <div *ngIf="image" class="box">
+      <img class="imagee" [src]="imgURL"/>
+      <button class="af" style="left: 50%" type="button" mat-mini-fab color="primary" (click)="openInput()">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <input (change)="selectFile($event)" id="fileInput" hidden type="file" name="file" accept="image/*">
+
+    </div>
+  </div>
+  <div class="mt-3 text-center">
+    <button type="submit"  mat-raised-button color="primary"><i class="fas fa-save mr-1"></i> Add carousel</button>
+  </div>
+</form>

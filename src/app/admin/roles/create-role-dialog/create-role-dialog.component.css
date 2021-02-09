@@ -1,0 +1,12 @@
+.cc{
+  height: 100%;
+}
+@media (min-width: 768px ) {
+  .cc {
+    position: relative;
+  }
+  .btm {
+    position: absolute;
+    bottom: 0;
+  }
+}

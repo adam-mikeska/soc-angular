@@ -1,0 +1,64 @@
+<mat-card style="margin-bottom:2em;">
+
+
+  <p class="center" style="font-size: 30px;margin-top: 10px;margin-bottom: 15px" >Products</p>
+  <div class="cntr">
+    <mat-form-field style="max-width: 150px">
+      <mat-icon class="search-icon" matPrefix >search</mat-icon>
+      <input matInput (input)="update()" [(ngModel)]="search" style="margin-bottom: 2px">
+      <button *ngIf="search" matSuffix mat-icon-button type="button" (click)="search='';update()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <div>
+      <button *ngIf="currUser.role?.permissions.includes('discount_products') || currUser.role?.permissions.includes('*')" (click)="discountProducts()" mat-raised-button class="mr-1 mt-1"><i class="fas fa-percent mr-1"></i>Discount</button>
+      <button *ngIf="currUser.role?.permissions.includes('create_product') || currUser.role?.permissions.includes('*')" (click)="createProduct()" mat-raised-button class="mr-1 mt-1"><i class="fas fa-plus mr-1"></i>Add product </button>
+    </div>
+  </div>
+  <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)"
+             [matSortActive]="sortActive"
+             [matSortDirection]="sortDirection">
+    <ng-container matColumnDef="select">
+    </ng-container>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="id"> Id</mat-header-cell>
+      <mat-cell *matCellDef="let product">  <span class="mobile-label">Id:</span> #{{product.id}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="title"> Title</mat-header-cell>
+      <mat-cell *matCellDef="let product">
+        <span class="mobile-label">Title:</span>
+       <a [routerLink]="'/product/'+product.product.title+'/'+product.underTitle"> <img style="cursor: pointer" class="mr-2"
+                [src]="apiUrl+'products/image/'+product.product.title+'/'+product.underTitle+'/'+product.productImages[0].image"/></a>{{product.product.title+' - '+product.underTitle}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="brand">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="product.brand.name"> Brand</mat-header-cell>
+      <mat-cell *matCellDef="let product">  <span class="mobile-label">Brand:</span> {{(product.product.brand === null ? null : product.product.brand.name)}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="price">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="price">Price</mat-header-cell>
+      <mat-cell *matCellDef="let product">  <span class="mobile-label">Price:</span> {{product.price-product.discount | number : '1.2-2' }}€</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="soldTimes">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="soldTimes"> Sold times</mat-header-cell>
+      <mat-cell *matCellDef="let product">  <span class="mobile-label">Sold times:</span>{{product.soldTimes}} x</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <mat-header-cell [style.display]="currUser.role?.permissions.includes('update_product') || currUser.role?.permissions.includes('*') ?'' : 'none'" *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell [style.display]="currUser.role?.permissions.includes('update_product') || currUser.role?.permissions.includes('*') ?'' : 'none'" *matCellDef="let order">  <span class="mobile-label">Actions:</span>
+        <mat-icon class="mr-1 akcie" matTooltip="Edit product"  (click)="editProductOption(order)">edit
+        </mat-icon>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+  </mat-table>
+  <h3 class="text-center mt-5" *ngIf=" dataSource.data.length===0">
+    No results
+  </h3>
+  <mat-paginator #paginator [pageSizeOptions]="[5,10,15,25,50,100,total]" [pageSize]="10" [length]="total"
+                 (page)="nextPage($event)"
+                 showFirstLastButtons>
+  </mat-paginator>
+</mat-card>

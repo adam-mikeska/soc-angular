@@ -1,0 +1,92 @@
+<p class="h2 text-center">Send email</p>
+<hr width="95%">
+
+<form #f="ngForm" (ngSubmit)="f.form.valid && sendEmail()" name="form">
+  <div class="form-group row">
+    <label class="col-3 col-form-label">Emails</label>
+    <div class="col-8">
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <div class="scrollable">
+          <mat-chip-list #chipList [(ngModel)]="request.address" name="address"
+                         id="address">
+            <mat-chip *ngFor="let user of arr" [selectable]="selectable"
+                      [removable]="removable" (removed)="remove(user)">{{user}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input (input)="update()"  matInput
+                   [matChipInputFor]="chipList"
+                   [formControl]="userCtrl"
+                   [matAutocomplete]="auto"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   [matChipInputAddOnBlur]="addOnBlur"
+                   (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <ng-container *ngFor="let user of filteredUsers ">
+            <mat-option *ngIf="!arr.includes(user)"  [value]="user">
+              {{ user }}
+            </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+        </div>
+        <button matSuffix mat-icon-button type="button" (click)="allEmails()">
+          <mat-icon>select_all</mat-icon>
+        </button>
+        <button matSuffix mat-icon-button type="button" (click)="arr=[]">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="subject" class="col-3 col-form-label">Subject</label>
+    <div class="col-3">
+      <mat-form-field class="w-100">
+        <mat-label>Subject</mat-label>
+        <input [(ngModel)]="request.subject" matInput type="text"
+               #subject="ngModel"
+               id="subject"
+               name="subject"
+               autocomplete="on"
+               maxlength="30">
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-12">
+  <ckeditor  [config]="editorConfig"  [editor]="Editor" [(ngModel)]="request.content" name="content" id="content"
+            (ready)="onReady($event)"></ckeditor>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-4">
+      <label for="file-upload" class="custom-file-upload  mt-3">
+        <i class="fas fa-cloud-upload-alt"></i> Add attachments
+      </label>
+      <input  #myFileInput id="file-upload" type="file" name="file-upload" multiple (change)="selectFiles($event)"/>
+    </div>
+    <div class="ml-auto mr-3">
+      <button *ngIf="selectedFiles.length>0" class="mt-3" mat-flat-button (click)="selectedFiles=[]">
+        <mat-icon style="-webkit-text-fill-color:red">delete</mat-icon>
+        Delete all
+      </button>
+    </div>
+  </div>
+  <ul class="uploads mt-2">
+    <li *ngFor="let upload of selectedFiles;let i=index" class="uploads__item">
+      <a [href]="" target="_blank" class="uploads__link">
+        {{ upload.name }}
+      </a>
+      <span class="uploads__size text-dark">
+					( Size: {{ upload.size | number }} bytes )
+				</span>
+      <button mat-icon-button (click)="removeSelectedFile(i)">
+        <mat-icon style="-webkit-text-fill-color:red">delete</mat-icon>
+      </button>
+    </li>
+  </ul>
+    <button class="mt-2" type="submit" id="sendMail" mat-raised-button color="primary" [disabled]="!f.valid || arr.length==0"><i
+      class="fas fa-envelope mr-1"></i> Send email
+    </button>
+</form>

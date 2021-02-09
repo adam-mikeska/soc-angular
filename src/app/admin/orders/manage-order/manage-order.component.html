@@ -1,0 +1,278 @@
+<p class="h2 text-center">Manage order</p>
+<hr>
+<div class="row">
+  <div class="col-lg-6">
+    <p class="h3 ml-0">Order details</p>
+    <hr>
+    <form #f="ngForm" (ngSubmit)="f.form.valid && updateOrder(rqst)">
+      <div class="form-group row">
+        <div class="col-12">
+          <mat-form-field class="w-100">
+            <mat-label>Name</mat-label>
+            <input matInput type="text"
+                   [(ngModel)]="rqst.name"
+                   #name="ngModel"
+                   id="name"
+                   name="name"
+                   maxlength="255"
+                   required>
+            <mat-error *ngIf="name.errors?.required">Name is required</mat-error>
+            <mat-error *ngIf="name.errors?.maxlength">Max length exceeded</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-6">
+          <mat-form-field class="w-100">
+            <mat-label>Tel. number</mat-label>
+            <input matInput type="tel"
+                   [(ngModel)]="rqst.telNumber"
+                   #telNumber="ngModel"
+                   id="telNumber"
+                   name="telNumber"
+                   maxlength="255"
+                   pattern="\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*(\d{1,2})$"
+                   required>
+            <mat-error *ngIf="telNumber.errors?.pattern">Please enter valid number</mat-error>
+            <mat-error *ngIf="telNumber.errors?.required">Tel.number is required</mat-error>
+            <mat-error *ngIf="telNumber.errors?.maxlength">Max length exceeded</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field class="w-100">
+            <mat-label>Email</mat-label>
+            <input matInput type="email"
+                   [(ngModel)]="rqst.email"
+                   #email="ngModel"
+                   id="email"
+                   name="email"
+                   maxlength="255"
+                   pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,3})+$"
+                   required>
+            <mat-error *ngIf="email.errors?.pattern">Please enter valid email</mat-error>
+            <mat-error *ngIf="email.errors?.required">Email is required</mat-error>
+            <mat-error *ngIf="email.errors?.maxlength">Max length exceeded</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-6">
+          <mat-form-field class="w-100">
+            <mat-label>Country</mat-label>
+            <input matInput type="text"
+                   [(ngModel)]="rqst.country"
+                   #country="ngModel"
+                   id="country"
+                   name="country"
+                   maxlength="255"
+                   required>
+            <mat-error *ngIf="country.errors?.required">Country is required</mat-error>
+            <mat-error *ngIf="country.errors?.maxlength">Max length exceeded</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field class="w-100">
+            <mat-label>City</mat-label>
+            <input matInput type="text"
+                   [(ngModel)]="rqst.city"
+                   #city="ngModel"
+                   id="city"
+                   name="city"
+                   maxlength="255"
+                   required>
+            <mat-error *ngIf="city.errors?.required">City is required</mat-error>
+            <mat-error *ngIf="city.errors?.maxlength">City length exceeded</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-6">
+          <mat-form-field class="w-100">
+            <mat-label>Address</mat-label>
+            <input matInput type="text"
+                   [(ngModel)]="rqst.address"
+                   #address="ngModel"
+                   id="address"
+                   name="address"
+                   maxlength="255"
+                   required>
+            <mat-error *ngIf="address.errors?.required">Address is required</mat-error>
+            <mat-error *ngIf="address.errors?.maxlength">Address length exceeded</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field class="w-100">
+            <mat-label>Postal code</mat-label>
+            <input matInput type="text"
+                   [(ngModel)]="rqst.postalCode"
+                   #postalCode="ngModel"
+                   id="postalCode"
+                   name="postalCode"
+                   maxlength="255"
+                   required>
+            <mat-error *ngIf="postalCode.errors?.required">Postal code is required</mat-error>
+            <mat-error *ngIf="postalCode.errors?.maxlength">Postal code length exceeded</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-12">
+          <mat-form-field class="w-100">
+            <mat-label>Order state</mat-label>
+            <mat-select [(value)]="rqst.orderState">
+              <mat-option *ngFor="let orderstatus of rdrstses" [value]="orderstatus">{{orderstatus}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+        <div class="text-center col ">
+          <button type="submit" mat-raised-button color="primary" [disabled]="!f.valid"><i class="fas fa-save mr-2"></i>Update order</button>
+        </div>
+    </form>
+  </div>
+  <div class="col-lg-6">
+    <p class="h3 ml-1">Order items</p>
+    <hr>
+    <div class="smlit">
+      <div class="row cart-detail mb-1" *ngFor="let orderItem of data?.orderItems;let i=index">
+        <div class="col-lg-2 col-sm-2 col-2 cart-detail-img">
+          <a [routerLink]="['/product/'+orderItem.productOption.product.title]+'/'+orderItem.productOption.underTitle">
+            <img style="cursor: pointer"
+                 [src]="apiUrl+'products/image/'+orderItem.productOption.product.title+'/'+orderItem.productOption.underTitle+'/'+orderItem.productOption.productImages[0].image"></a>
+        </div>
+        <div class="col-lg-3 col-sm-3 col-3 cart-detail-product">
+          <a
+            [routerLink]="['/product/'+orderItem?.productOption.product.title]+'/'+orderItem?.productOption?.underTitle">
+            <p>{{orderItem.productOption.product.title}}
+              - {{orderItem.productOption.underTitle}}</p></a>
+          <p *ngIf="orderItem.productOption.product.brand" style="font-size: 12px;color: #535353">Brand
+            : {{orderItem?.productOption.product.brand.name}}</p>
+          <p style="font-size: 12px;color: #535353">Size : {{orderItem.productSize}}</p>
+        </div>
+        <div class="col-lg-3 col-sm-3 col-3 cart-detail-product">
+          <form #ca="ngForm"
+                (ngSubmit)="ca.form.valid && openDialogConfirmUpdateOrderItem(orderItem.id,orderIte.value)"
+                class="ajaj">
+            <mat-form-field class="example-full-width">
+              <input #orderIte="ngModel"
+                     [id]="'quantity'+[i]" [name]="'quantity'+[i]" type="number" matInput min="0"
+                     [ngModel]="orderItem.quantity"
+                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                     required>
+              <mat-error *ngIf="orderIte.errors?.required">Order item is required</mat-error>
+              <button matSuffix type="submit" mat-icon-button>
+                <mat-icon style="color: #62a000">check</mat-icon>
+              </button>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-lg-2 col-sm-2 col-2 cart-detail-product">
+          <span
+            class="price">  {{((data?.coupon && data?.coupon.discountType === 'PERCENTAGE' ? (orderItem.price / 100) * (100 - data?.coupon.discount) : (orderItem.price)) | number : '1.2-2')}}
+            €</span>
+          <br>
+          <span *ngIf="data?.coupon && data?.coupon.discountType==='PERCENTAGE'"
+                class="price fr">  {{(orderItem.price) | number : '1.2-2' }} €</span>
+          <p
+            class="priceWW">  {{(data?.coupon && data?.coupon.discountType === 'PERCENTAGE' ? ((orderItem?.price / orderItem?.quantity) / 100) * (100 - data?.coupon.discount) : (orderItem?.price / orderItem?.quantity)) | number : '1.2-2' }}
+            €/1</p>
+        </div>
+        <div class="col-lg-1 col-sm-1 col-1 cart-detail-product">
+          <button type="button" mat-icon-button class="ajaj"
+                  (click)="openDialogConfirmDeleteOrderItem(orderItem.id)">
+            <mat-icon color="warn">close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div
+      class="row cart-detail1 mb-2">
+      <div class="col-lg-2 col-sm-2 col-2 cart-detail-img1">
+        <i class="fas fa-credit-card ml-4" style="font-size: 21px"></i>
+      </div>
+      <div class="col-lg-6 col-sm-6 col-6 cart-detail-product1 mb-2">
+        <a>
+          <p>{{data?.cart_orderPayment.payment.split("_").join(" ")}}</p></a>
+      </div>
+      <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+        <a>
+          <span
+            class="price">  {{data?.cart_orderPayment?.price === 0 ? 'FREE' : (data?.cart_orderPayment?.price  | number : '1.2-2')+ ' €' }}</span>
+        </a>
+      </div>
+    </div>
+    <div class="row cart-detail1 mb-4">
+      <div class="col-lg-2 col-sm-2 col-2 cart-detail-img1">
+        <i class="fas fa-truck ml-4" style="font-size: 21px"></i>
+      </div>
+      <div class="col-lg-6 col-sm-6 col-6 cart-detail-product1">
+        <a>
+          <p>{{data?.cart_orderDelivery.delivery.split("_").join(" ")}}</p>
+        </a>
+      </div>
+      <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+        <a>
+          <span
+            class="price">  {{data?.cart_orderDelivery?.price === 0 ? 'FREE' : (data?.cart_orderDelivery?.price | number : '1.2-2') + ' €' }}</span>
+        </a>
+      </div>
+    </div>
+    <hr *ngIf="data?.coupon" style="margin-top: 25px">
+    <div *ngIf="data?.coupon" class="row cart-detail1">
+      <div class="col-lg-2 col-sm-2 col-2 cart-detail-img1">
+        <i class="fas fa-gift" style="font-size: 21px;margin-left: 21px"></i>
+      </div>
+      <div class="col-lg-6 col-sm-6 col-6 cart-detail-product1">
+        <a>
+          <p> Coupon - {{data?.coupon.code}}</p></a>
+      </div>
+      <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+        <a>
+                  <span
+                    class="price"> {{ (!data?.coupon.discount ? '' : '-' + (data?.coupon.discount | number : '1.2-2')) + ' ' + (data?.coupon.discountType === 'PERCENTAGE' ? '%' : (data?.coupon.discountType === 'TOTAL' ? "€" : "FREE DELIVERY"))}}</span></a>
+      </div>
+    </div>
+    <hr style="margin-top: 26px">
+    <div
+      class="row cart-detail1 {{data?.coupon && data?.coupon.discountType==='PERCENTAGE' && data?.totalPrice>0 || data?.coupon && data?.coupon.discountType==='TOTAL' && data?.totalPrice>0? 'mb-3' : ''}}">
+      <div class="col-lg-2 col-sm-2 col-2 cart-detail-img1">
+
+      </div>
+      <div class="col-lg-6 col-sm-6 col-6 cart-detail-product1">
+        <a>
+          <p>Total price without tax: </p></a>
+      </div>
+      <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+        <a>
+                  <span
+                    class="price">  {{((data?.totalPrice / 120) * 100  | number : '1.2-2') }} €</span>
+          <br>
+          <span *ngIf="data?.coupon && data?.coupon.discountType==='PERCENTAGE' && data?.totalPrice>0 " class="price fr"> {{((((((data?.totalPrice/(100-data?.coupon.discount))*100)-((data?.cart_orderPayment.price/(100 - data?.coupon.discount)) * 100)-((data?.cart_orderDelivery.price/(100 - data?.coupon.discount)) * 100)+data?.cart_orderDelivery.price+data?.cart_orderPayment.price)/ 120)*100) | number : '1.2-2')+' €' }}</span>          <span *ngIf="data?.coupon && data?.coupon.discountType==='TOTAL' && data?.totalPrice>0 "
+                class="price fr"> {{(((data?.totalPrice + data?.coupon.discount) / 120) * 100 | number : '1.2-2') + ' €' }}</span>
+        </a>
+      </div>
+    </div>
+    <div class="row cart-detail1 mb-5">
+      <div class="col-lg-2 col-sm-2 col-2 cart-detail-img1">
+
+      </div>
+      <div class="col-lg-6 col-sm-6 col-6 cart-detail-product1">
+        <a>
+          <p>Total price: </p></a>
+      </div>
+      <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+        <a>
+          <span class="price">  {{((data?.totalPrice)  | number : '1.2-2') }} €</span>
+          <br>
+          <span *ngIf="data?.coupon && data?.coupon.discountType==='PERCENTAGE' && data?.totalPrice>0"
+                class="price fr"> {{(((data?.totalPrice / (100 - data?.coupon.discount)) * 100)-((data?.cart_orderDelivery.price/(100 - data?.coupon.discount)) * 100)-((data?.cart_orderPayment.price/(100 - data?.coupon.discount)) * 100)+data?.cart_orderPayment.price+data?.cart_orderDelivery.price| number : '1.2-2') + ' €' }}</span>
+          <span *ngIf="data?.coupon && data?.coupon.discountType==='TOTAL' && data?.totalPrice>0"
+                class="price fr"> {{((data?.totalPrice + data?.coupon.discount)  | number : '1.2-2') + ' €' }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+

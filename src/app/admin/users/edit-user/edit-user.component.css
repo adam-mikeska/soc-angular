@@ -1,0 +1,41 @@
+.photo {
+  width:  120px;
+  height: 120px;
+  border-radius: 50%;
+}
+
+
+@media only screen and (max-width: 767px) {
+  .ff {
+    text-align: center;
+  }
+}
+
+.box {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  max-width: 150px;
+}
+button.mat-mini-fab.af {
+   opacity: 0;
+   display: inline-block;
+   position: absolute;
+   top: 50%;
+   transform: translate(-50%, -50%);
+   -moz-user-select: none;
+   -ms-user-select: none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -webkit-touch-callout: none;
+   -webkit-transition: opacity .5s ease-in-out;
+   -moz-transition: opacity .5s ease-in-out;
+   -ms-transition: opacity .5s ease-in-out;
+   -o-transition: opacity .5s ease-in-out;
+   transition: opacity .5s ease-in-out;
+ }
+.box:hover > .mat-mini-fab.af {
+  zoom: 1;
+  filter: alpha(opacity=50);
+  opacity: 1;
+}

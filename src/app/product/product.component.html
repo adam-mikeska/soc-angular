@@ -1,0 +1,79 @@
+<div class="container" *ngIf="isLoaded" [@changeRoute]="animationState$ | async" (@changeRoute.done)="animationDoneHandler()">
+  <div class="row dd">
+    <div class="col-md-8 mb-2">
+      <ks-carousel *ngIf="isLoaded" [id]="111" [images]="imagesRect"
+                   [carouselConfig]="{maxWidth: '766px', maxHeight: '550px', showArrows: true, objectFit: 'cover', keyboardEnable: true, modalGalleryEnable: true, legacyIE11Mode: false}"
+                   [previewConfig]="{visible: true, number: 5, width: 'auto', maxHeight: '110px'}">
+      </ks-carousel>
+    </div>
+    <div class="col-md-3 xx">
+      <div class="row">
+        <div class="col-12">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb pl-1" style="background-color: transparent">
+              <li *ngFor="let route of category;let i=index" class="breadcrumb-item"><a [routerLink]="getBreadcrumbLink(i)">{{(i === 0 ? 'Home' : route)}}</a></li>
+            </ol>
+          </nav>
+        </div>
+        <div class="col-9 text-left">
+          <p class="title ml-1 mt-0">{{productOption?.product.title}}</p>
+          <p class="under-title mt-0 ml-1">{{productOption?.underTitle}}</p>
+        </div>
+        <div class="col-3 text-right">
+          <img class="logo mt-0" *ngIf="productOption?.product.brand" [src]=" apiUrl+'products/brands/image/' + productOption?.product.brand.image"/>
+        </div>
+      </div>
+      <div class="row aa">
+        <ng-container *ngFor="let sameProductOption of sameProductOptions">
+          <a [routerLink]="'/product/'+sameProductOption.product.title+'/'+sameProductOption.underTitle"><img  [ngClass]="(sameProductOption.underTitle===option)?'product-option':'product-option1'" class="col-2 mt-1" [src]="apiUrl+'products/image/'+sameProductOption?.product.title+'/'+sameProductOption?.underTitle+'/'+sameProductOption?.productImages[0].image"/></a>
+        </ng-container>
+      </div>
+      <hr>
+      <div class="row prc">
+        <div class="col-6 text-left">
+          <p class="price ml-1">{{productOption?.price-productOption?.discount | number : '1.2-2' }} €</p>
+        </div>
+        <div class="col-6 text-right">
+          <p *ngIf="productOption?.discount!==0" class="price-before mr-1">{{productOption?.price| number : '1.2-2' }} €</p>
+        </div>
+      </div>
+      <hr>
+      <form #f="ngForm" (ngSubmit)="f.form.valid && addToCart()" >
+      <div class="row frm">
+        <mat-form-field matInput appearance="fill" class="col-7">
+          <mat-label>{{notOnStock===false ? 'Size' : 'Out of stock'}}</mat-label>
+          <mat-select [disabled]="notOnStock===true" class="text-center" name="size" id="size" [(ngModel)]="cartItem.size" #Size="ngModel"
+                      [ngClass]="{ 'is-invalid': f.submitted && Size.invalid }" required >
+            <ng-container *ngFor="let productSize of productOption?.productSizes">
+            <mat-option *ngIf="productSize.onStock>0" [value]="productSize.size">
+              {{productSize.size}}
+            </mat-option>
+            </ng-container>
+          </mat-select>
+          <mat-error *ngIf="Size.errors?.required">Size is required </mat-error>
+        </mat-form-field>
+        <mat-form-field matInput  class="quantity col-5" appearance="fill">
+          <mat-label>{{notOnStock===false ? 'Quantity' : 'Out of stock'}}</mat-label>
+          <input [disabled]="notOnStock===true" #quantity="ngModel"
+                 [ngClass]="{ 'is-invalid': f.submitted && quantity.invalid }"  [(ngModel)]="cartItem.quantity"  class="text-center" type="number" matInput name="quantity"  id="quantity" min="1"
+                 onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57" required>
+          <mat-error *ngIf="quantity.errors?.required">Quantity is required</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="row mt-3 mb-5 text-center">
+        <div class="col-md-12">
+          <button type="submit" [disabled]="!f.valid " mat-raised-button color="primary"><mat-icon class="mr-1">shopping_cart</mat-icon>Add to cart</button>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
+  <hr>
+  <p class="title2">{{(productOption?.product.brand===null ? "": productOption?.product.brand.name+" -")}} {{productOption?.product.title}} {{productOption?.underTitle}}</p>
+  <hr>
+  <div>
+    <p [innerHTML]="desc" ></p>
+  </div>
+  <hr>
+</div>
+

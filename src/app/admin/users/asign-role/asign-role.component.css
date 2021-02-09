@@ -1,0 +1,27 @@
+.scrollable {
+  width: 100%;
+  height: auto;
+  max-height: 50px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+mat-form-field {
+  width: 100%;
+}
+.cc{
+  height: 100%;
+}
+@media (min-width: 768px ) {
+  .cc {
+    position: relative;
+  }
+  .btm {
+    position: absolute;
+    bottom: 0;
+  }
+}
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* make scrollbar transparent */
+}

@@ -1,0 +1,77 @@
+<p class="h2 text-center">Block user</p>
+<hr width="95%">
+<form #f="ngForm" (ngSubmit)="f.form.valid && lockUser(request)">
+  <div class="form-group row">
+    <label class="col-3 col-form-label">Users</label>
+    <div class="col-8">
+      <mat-form-field>
+        <mat-label>Users</mat-label>
+        <div class="scrollable">
+          <mat-chip-list #chipList [(ngModel)]="request.users" name="users"
+                         id="users">
+            <mat-chip *ngFor="let user of arr" [selectable]="selectable"
+                      [removable]="removable" (removed)="remove(user)">{{user}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input (input)="update()" matInput
+                   [formControl]="userCtrl"
+                   [matAutocomplete]="auto"
+                   [matChipInputFor]="chipList"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   [matChipInputAddOnBlur]="addOnBlur"
+                   (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <ng-container *ngFor="let user of filteredUsers ">
+              <mat-option *ngIf="!arr.includes(user)"  [value]="user">
+                {{ user }}
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+        </div>
+        <button matSuffix mat-icon-button type="button" (click)="allEmails()">
+          <mat-icon>select_all</mat-icon>
+        </button>
+        <button matSuffix mat-icon-button type="button" (click)="arr=[]">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="lockTime" class="col-3 col-form-label">Block time</label>
+    <div class="col-3">
+      <mat-form-field class="w-100">
+        <mat-label>Time(0 for unblock)</mat-label>
+        <input [(ngModel)]="request.lockTime" matInput type="number"
+               #lockTime="ngModel"
+               id="lockTime"
+               name="lockTime"
+               autocomplete="on"
+               maxlength="30"
+               min="0"
+               oninput="validity.valid||(value='')"
+               [disabled]="timeUnit.value==='PERMANENTLY' || timeUnit.value==='UNLOCK'"
+               [required]="timeUnit.value!=='PERMANENTLY' || timeUnit.value!=='UNLOCK'">
+        <mat-error *ngIf="lockTime.errors?.required">Time is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-3">
+      <mat-form-field class="w-100">
+        <mat-label>Time unit</mat-label>
+        <mat-select id="timeUnit" name="timeUnit" #timeUnit="ngModel"
+                    [(ngModel)]="request.timeUnit" matInput required>
+          <mat-option value="" selected disabled>Select</mat-option>
+          <mat-option value="MINUTES">Minute/s</mat-option>
+          <mat-option value="HOURS">Hour/s</mat-option>
+          <mat-option value="DAYS">Day/s</mat-option>
+          <mat-option value="PERMANENTLY">PERMANENTLY</mat-option>
+        </mat-select>
+        <mat-error *ngIf="timeUnit.errors?.required">Time unit is required</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+    <button class="mt-3" type="submit" id="sendMail" mat-raised-button color="warn" [disabled]="!f.valid || arr.length==0"><i
+      class="fas fa-ban mr-1"></i> Block user
+    </button>
+</form>

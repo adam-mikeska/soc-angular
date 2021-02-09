@@ -1,0 +1,94 @@
+<mat-card class="text-center mt-5">
+  <p class="h2 text-center">Registration</p>
+  <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && register(request)">
+    <div>
+      <mat-form-field class="example-full-width">
+        <mat-icon style="margin-bottom: -5px;margin-right: 2px" matPrefix>email</mat-icon>
+        <input matInput type="email"
+               id="email"
+               name="email"
+               [(ngModel)]="request.email"
+               #email="ngModel"
+               required
+               maxlength="255"
+               pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,5})+$"/>
+        <mat-error *ngIf="email.errors?.required">Email is required</mat-error>
+        <mat-error *ngIf="email.errors?.pattern">Please enter valid email</mat-error>
+        <mat-hint>Email</mat-hint>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="example-full-width">
+        <mat-icon style="margin-bottom: -5px;margin-right: 2px" matPrefix>person</mat-icon>
+        <input matInput type="text"
+               id="name"
+               name="name"
+               [(ngModel)]="request.name"
+               #name="ngModel"
+               maxlength="255"
+               required/>
+        <mat-error *ngIf="name.errors?.required">Name is required</mat-error>
+        <mat-hint>Name</mat-hint>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="example-full-width">
+        <mat-icon style="margin-bottom: -5px;margin-right: 2px" matPrefix>wc</mat-icon>
+        <mat-select  id="gender"
+                     matNativeControl
+                     [(ngModel)]="request.gender"
+                     #gender="ngModel"
+                     name="gender"
+                     required>
+          <mat-option value="" selected disabled>Choose here</mat-option>
+          <mat-option value="Male">Male</mat-option>
+          <mat-option value="Female">Female</mat-option>
+        </mat-select >
+        <mat-hint>Gender</mat-hint>
+        <mat-error *ngIf="gender.errors?.required">Gender is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+    <mat-form-field class="example-full-width">
+      <mat-icon style="margin-bottom: -5px;margin-right: 2px" matPrefix>vpn_key</mat-icon>
+      <input matInput [type]="hide ? 'password' : 'text'"
+             id="password"
+             name="password"
+             [(ngModel)]="request.password"
+             #password="ngModel"
+             [ngClass]="{ 'is-invalid': f.submitted && password.invalid }"
+             minlength="8"
+             maxlength="255"
+             [autocomplete]="true"
+             required/>
+      <mat-icon *ngIf="request.password" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <mat-error *ngIf="password.errors?.required">Password is required</mat-error>
+      <mat-error *ngIf="password.errors?.minlength">Minimal password size is 8</mat-error>
+      <mat-hint>Password</mat-hint>
+    </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="example-full-width">
+        <mat-icon style="margin-bottom: -5px;margin-right: 2px"  matPrefix>vpn_key</mat-icon>
+          <input matInput [type]="hide ? 'password' : 'text'"
+                 [(ngModel)]="request.repeatPassword"
+                 #repeatPassword="ngModel"
+                 id="repeatPassword"
+                 name="repeatPassword"
+                 autocomplete="on"
+                 required
+                 maxlength="255"
+                 [autocomplete]="true"
+                 pattern="{{ password.value }}">
+          <mat-error *ngIf="repeatPassword.errors?.required">Please repeat new password</mat-error>
+          <mat-error *ngIf="repeatPassword.errors?.pattern">Passwords does not match</mat-error>
+          <mat-icon *ngIf="request.repeatPassword" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-hint>Password</mat-hint>
+        </mat-form-field>
+    </div>
+    <div class="form-group mt-5">
+      <button type="submit" mat-raised-button color="primary">Register</button>
+      <a class="abtn" mat-button routerLink="/login">Log in</a>
+    </div>
+  </form>
+</mat-card>

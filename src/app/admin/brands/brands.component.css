@@ -1,0 +1,54 @@
+.logo {
+  min-width: 30px;
+  max-width: 60px;
+  height: 20px;
+}
+.logo2 {
+  max-width: 150px;
+  height: 70px;
+}
+.box {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  position: relative;
+  max-width: 150px;
+}
+button.mat-mini-fab.af {
+  opacity: 0;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-transition: opacity .5s ease-in-out;
+  -moz-transition: opacity .5s ease-in-out;
+  -ms-transition: opacity .5s ease-in-out;
+  -o-transition: opacity .5s ease-in-out;
+  transition: opacity .5s ease-in-out;
+}
+.box:hover > button.mat-mini-fab.af {
+  zoom: 1;
+  filter: alpha(opacity=50);
+  opacity: 1;
+}
+.mat-icon-button.small {
+
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+
+}
+.mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+}
+

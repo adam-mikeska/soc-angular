@@ -1,0 +1,51 @@
+<mat-card style="margin-bottom:2em;">
+  <p style="font-size: 30px;margin-top: 10px;margin-bottom: 15px" >Coupons</p>
+  <div class="cntr ">
+    <mat-form-field class="left" style="max-width: 150px">
+      <mat-icon class="search-icon" matPrefix >search</mat-icon>
+      <input matInput (input)="update()" [(ngModel)]="search" style="margin-bottom: 2px">
+      <button *ngIf="search" matSuffix mat-icon-button type="button" (click)="search='';update()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <div>
+      <button *ngIf="currUser.role?.permissions.includes('create_coupon') || currUser.role?.permissions.includes('*')" (click)="openDialogCreateCoupon()" mat-raised-button class="mr-1 mt-1"><i class="fas fa-dollar-sign mr-1"></i>Create coupon</button>
+    </div>
+  </div>
+  <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)"
+             [matSortActive]="sortActive"
+             [matSortDirection]="sortDirection">
+    <ng-container matColumnDef="select">
+    </ng-container>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="id">Id</mat-header-cell>
+      <mat-cell *matCellDef="let coupon">  <span class="mobile-label">Id:</span> #{{coupon.id}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="code">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="code">Code</mat-header-cell>
+      <mat-cell *matCellDef="let coupon">  <span class="mobile-label">Code:</span> {{coupon.code}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="discount">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="discount">Discount</mat-header-cell>
+      <mat-cell *matCellDef="let coupon">  <span class="mobile-label">Discount:</span>{{coupon.discountType==='TOTAL' ? "- "+coupon.discount+'€' : coupon.discountType==='PERCENTAGE'? "- "+coupon.discount+'%' : ''}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="minCartPrice">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="minCartPrice">Min. cart price</mat-header-cell>
+      <mat-cell *matCellDef="let coupon">  <span class="mobile-label">Min. cart price:</span> {{coupon.minCartPrice  | number : '1.2-2' }}€</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="isEnabled">
+      <mat-header-cell *matHeaderCellDef mat-sort-header="enabled">Is enabled</mat-header-cell>
+      <mat-cell *matCellDef="let coupon">  <span class="mobile-label">Is enabled:</span>      <mat-slide-toggle (change)="coupon.enabled=!coupon.enabled;disableEnableSale(coupon.id)"  color="primary" [checked]="coupon.enabled"></mat-slide-toggle></mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+  </mat-table>
+  <h3 class="text-center mt-5" *ngIf="dataSource.data.length===0">
+    No results
+  </h3>
+  <mat-paginator #paginator [pageSizeOptions]="[5,10,15,25,50,100,total]" [pageSize]="10" [length]="total"
+                 (page)="nextPage($event)"
+                 showFirstLastButtons>
+  </mat-paginator>
+</mat-card>

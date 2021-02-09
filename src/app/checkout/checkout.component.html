@@ -1,0 +1,45 @@
+<div class="container">
+  <mat-card>
+        <div *ngIf="order?.orderState==='AWAITING_PAYMENT' || order?.orderState==='PROCESSING'">
+          <p class="h2 text-success">Order placed successfully!</p>
+          <i style="font-size: 100px" class="far fa-check-circle text-success"></i>
+        </div>
+        <div *ngIf=" order?.orderState==='PAID'">
+          <p class="h2 text-success">Successfully paid {{order?.totalPrice | number : '1.2-2'}}€!</p>
+          <i style="font-size: 100px" class="far fa-check-circle text-success"></i>
+        </div>
+        <div *ngIf=" order?.orderState==='COMPLETED'">
+          <p class="h2 text-success">Order is completed!</p>
+          <i style="font-size: 100px" class="far fa-check-circle text-success"></i>
+        </div>
+        <div *ngIf=" order?.orderState==='SHIPPED'">
+          <p class="h2 text-success">Your order is comming to you!</p>
+          <i style="font-size: 100px" class="far fa-check-circle text-success"></i>
+        </div>
+        <div *ngIf=" order?.orderState==='REFUNDED'">
+          <p class="h2">Your order were refunded!</p>
+          <i style="font-size: 100px" class="far fa-times-circle"></i>
+        </div>
+        <div *ngIf=" order?.orderState==='CANCELED'">
+          <p class="h2">Your order were CANCELED!</p>
+          <i style="font-size: 100px" class="far fa-times-circle"></i>
+        </div>
+        <hr class="mt-4">
+        <p class="h5"> Order number: #{{order?.id}}</p>
+        <hr class="mb-4">
+        <p *ngIf=" order?.orderState==='PAID'" class="h5">We will contact you about every order state change!</p>
+        <p *ngIf=" order?.orderState==='PROCESSING' && order?.cart_orderDelivery.delivery==='Personal_visit'" class="h6">We are working to expand your order!</p>
+        <p *ngIf=" order?.cart_orderPayment.payment==='Paypal' && order?.orderState==='AWAITING_PAYMENT' || order?.cart_orderPayment.payment==='Online_bank_payment' && order?.orderState==='AWAITING_PAYMENT'" class="h6">Please pay {{order?.totalPrice | number : '1.2-2'}}€ with payment methot, you have selected!</p>
+        <p *ngIf=" order?.orderState==='SHIPPED'" class="h6">Your order has been shipped, and it is comming to you!</p>
+        <button mat-flat-button color="primary" class="mb-3"
+                *ngIf="order?.orderState==='PROCESSING' && order?.cart_orderPayment.payment==='Online_bank_payment' || order?.orderState==='AWAITING_PAYMENT' && order?.cart_orderPayment.payment==='Online_bank_payment'"
+                (click)="showCheckout()">
+          <mat-icon class="mr-2">credit_card</mat-icon>
+          Pay now!
+        </button>
+        <div class="ppl" [hidden]="paidFor" #paypal></div>
+        <p *ngIf="order?.orderState!=='REFUNDED' && order?.orderState!=='CANCELED'" class="h6"> Thanks you for your purchase!</p>
+        <p *ngIf="order?.orderState==='REFUNDED' || order?.orderState==='CANCELED'" class="h6"> You order were {{ order.orderState}} !</p>
+        <p  class="h6"> Hope to see you again!</p>
+  </mat-card>
+</div>

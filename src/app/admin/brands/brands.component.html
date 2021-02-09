@@ -1,0 +1,55 @@
+<mat-card style="margin-bottom:2em;">
+  <div class="cntr mb-3">
+    <p style="font-size: 30px;margin-top: 10px;margin-bottom: 15px">Brands</p>
+   <div>
+    <button *ngIf="user.role.permissions.includes('add_brand') || user.role.permissions.includes('*')" (click)="addBrand()" mat-raised-button class="ml-auto"><i class="fas fa-plus mr-1"></i> Add brand
+    </button>
+   </div>
+  </div>
+  <mat-accordion>
+    <mat-expansion-panel [disabled]="!user?.role?.permissions.includes('update_brand') && !user?.role?.permissions.includes('*')" *ngFor="let brand of brands;let i=index" >
+      <mat-expansion-panel-header>
+        <button type="button"
+                *ngIf="!user.role.permissions.includes('*') && user.role.permissions.includes('delete_brand') && !user.role.permissions.includes('update_brand') && brand.name!=='Unbranded'"
+                (click)="confirmDeleteBrand(brand.id)" mat-icon-button class="small ml-auto mr-2">
+          <mat-icon color="warn">delete_outline</mat-icon>
+        </button>
+        <mat-panel-title >
+          <img class="logo mr-3" [src]="apiUrl+'products/brands/image/' +brand.image"/>{{brand.name}}
+        </mat-panel-title>
+        <mat-panel-description>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="row imdiv">
+        <div class="box">
+          <img class="logo2 mr-3" [src]="apiUrl+'products/brands/image/' +brand.image"/>
+          <button type="button"  mat-mini-fab color="primary" class="af"  (click)="openInput(i)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <input (change)="selectFile(brand.id,$event)" id="fileInput{{i}}" hidden type="file"  name="file{{i}}" accept="image/*">
+        </div>
+      </div>
+      <form #f="ngForm" (ngSubmit)="f.form.valid && updateBrand(brand.id,brand.name)">
+        <mat-form-field class="w-100">
+          <mat-label>Role</mat-label>
+          <input [disabled]="brand.name==='Unbranded'" name="name{{i}}" id="name{{i}}" matInput type="text"
+                 [(ngModel)]="brand.name"
+                 #name="ngModel"
+                 [ngClass]="{ 'is-invalid': f.submitted && name.invalid }"
+                 maxlength="255"
+                 required>
+          <mat-error *ngIf="name.errors?.required">Name is required</mat-error>
+          <mat-error *ngIf="name.errors?.maxlength">Max length exceeded</mat-error>
+        </mat-form-field>
+        <div class="row">
+          <button type="submit" mat-raised-button color="primary" class="mr-auto ml-4 mt-2 "><i
+            class="fas fa-save mr-1"></i> Update
+          </button>
+          <button (click)="confirmDeleteBrand(brand.id)" *ngIf="brand.name!=='Unbranded' && user.role.permissions.includes('delete_brand') || brand.name!=='Unbranded' && user.role.permissions.includes('*') "  type="button" mat-raised-button color="warn" class="ml-auto mr-4 mt-2 "><i class="fas fa-trash mr-1"></i> Delete
+          </button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+</mat-card>

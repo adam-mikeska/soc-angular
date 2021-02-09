@@ -1,0 +1,130 @@
+.category {
+  margin-top: 15px;
+  max-height: 35px;
+  border-radius: 3px;
+
+  -webkit-transition: all 1s ease-out;
+  -moz-transition: all 1s ease-out;
+  -o-transition: all 1s ease-out;
+  -ms-transition: all 1s ease-out;
+  transition: all 1s ease-out;
+  -webkit-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.25);
+  -moz-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.25);
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.25);
+}
+.category:hover {
+  background-color: #eeeeee;
+  -webkit-transition: background-color 1000ms linear;
+  -ms-transition: background-color 1000ms linear;
+  transition: background-color 1000ms linear;
+}
+.category-under{
+  display: flex;
+  color: #868686;
+  text-decoration: none;
+  -webkit-transition: color 1000ms linear;
+  -ms-transition: color 1000ms linear;
+  transition: color 1000ms linear;
+}
+.category-under:hover{
+  color: black;
+  -webkit-transition: background-color 1000ms linear;
+  -ms-transition: background-color 1000ms linear;
+  transition: background-color 1000ms linear;
+}
+
+.hdr {
+  height: 200px;
+  background-color:#f8f9fb ;
+}
+
+.product-image {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+
+  -webkit-transition: opacity 1s ease-in-out;
+  -moz-transition: opacity 1s ease-in-out;
+  -o-transition: opacity 1s ease-in-out;
+  transition: opacity 1s ease-in-out;
+}
+
+:host ::ng-deep .mat-form-field-flex > .mat-form-field-infix { padding: 0.4em 0px !important;}
+:host ::ng-deep .mat-form-field-label-wrapper { top: -1.5em; }
+
+:host ::ng-deep .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  transform: translateY(-1.1em) scale(.75);
+  width: 133.33333%;
+}
+
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0.4em 0 0.4em 0 !important;
+  top: -0.25em;
+}
+
+a img:last-child:not(:only-child) {
+  display: none;
+}
+a:hover img:last-child {
+  display: block;
+}
+a:hover img:first-child:not(:only-child) {
+  display: none;
+}
+
+.logo {
+  height: 15px;
+  width: 20px;
+  margin-left: auto;
+}
+
+
+.fa-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.fa-enabled{
+  cursor: pointer;
+}
+.grey {
+  pointer-events: none;
+  color: #878787;
+}
+.srtby{
+  margin-top: 10px;
+  width: 100px;
+  margin-right: auto;
+  margin-right: 10px;
+}
+.pgntr {
+  margin-left: auto;
+  margin-right: 10px
+}
+.prce {
+  margin-top: 10px;
+  width: 50%;
+  margin-right: 5px;
+}
+@media only screen and (max-width: 1199px) {
+  .srtby {
+    width: 90%;
+  }
+  mat-paginator {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.sorthdr{
+  padding: 0px 15px 0px 15px;
+}
+::ng-deep .mat-autocomplete-panel {
+  max-height: 350px !important;
+}

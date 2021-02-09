@@ -1,0 +1,71 @@
+.title{
+  margin-top: 20px;
+  font-size: 30px;
+}
+.under-title{
+  margin-top: 22px;
+  font-size: 17px;
+}
+
+.mini{
+  width: 20%;
+  margin-top: 0;
+}
+.xx{
+  margin-top: 0px;
+  margin-left: 10px;
+  margin-right: 10px;
+
+}
+.dd {
+  margin-top: 10px;
+}
+.price {
+  font-size: 18px;
+}
+.price-before {
+  text-decoration: line-through;
+  font-size: 19px;
+}
+
+.frm{
+  margin-top: 20px;
+}
+.prc {
+  margin-top: 20px;
+}
+.logo {
+  width: 25px;margin-top: 20px;
+}
+.product-option{
+  max-width: 70px;
+  height: 40px;
+  margin-left: 5px;
+  border: 1px solid black;
+  border-radius: 3px;
+
+}
+.product-option1{
+  max-width: 70px;
+  height: 40px;
+  margin-left: 5px;
+  width: 100%;
+  border:none;
+}
+.col-2:hover{
+  border-radius: 3px;
+  border: 1px solid black;
+}
+.aa{
+  margin-left: 0px;
+}
+.inside .right-arrow-image{
+  background-color: #4a4af5;
+}
+
+
+.title2{
+
+  font-size: 30px;
+}
+

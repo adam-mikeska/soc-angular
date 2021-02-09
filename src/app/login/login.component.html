@@ -1,0 +1,42 @@
+<mat-card class="text-center mt-5">
+  <p class="h2 text-center">Login</p>
+  <form name="form" #f="ngForm" (ngSubmit)="f.form.valid && login(authRequest)">
+    <div>
+      <mat-form-field class="example-full-width">
+        <mat-icon style="margin-bottom: -5px;margin-right: 2px" matPrefix>email</mat-icon>
+        <input matInput type="text"
+               id="email"
+               name="email"
+               [(ngModel)]="authRequest.email"
+               #email="ngModel"
+               required
+               pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,5})+$"/>
+        <mat-error *ngIf="email.errors?.required">Email is required</mat-error>
+        <mat-error *ngIf="email.errors?.pattern">Please enter valid email</mat-error>
+        <mat-hint>Email</mat-hint>
+      </mat-form-field>
+    </div>
+    <mat-form-field class="example-full-width">
+      <mat-icon style="margin-bottom: -5px;margin-right: 2px" matPrefix>vpn_key</mat-icon>
+      <input matInput [type]="hide ? 'password' : 'text'"
+             id="password"
+             name="password"
+             [(ngModel)]="authRequest.password"
+             #password="ngModel"
+             minlength="8"
+             [autocomplete]="true"
+             required/>
+      <mat-error *ngIf="password.errors?.required">Password is required</mat-error>
+      <mat-error *ngIf="password.errors?.minlength">Password has 8+ characters</mat-error>
+      <mat-icon  *ngIf="authRequest.password" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <mat-hint>Password</mat-hint>
+    </mat-form-field>
+    <div class="form-group mt-5">
+      <button type="submit" mat-raised-button color="primary">Log in</button>
+      <a class="abtn" mat-button routerLink="/register">Register</a>
+    </div>
+    <div class="form-group">
+      <a href="javascript:void(0)" (click)="openChangePasswordDialog()">Forgot password?</a>
+    </div>
+  </form>
+</mat-card>

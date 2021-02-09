@@ -1,0 +1,59 @@
+img {
+  border-radius: 50%;
+  width: 130px;
+  height: 130px;
+  border: 1px solid #c2c2c2;
+}
+
+.farba {
+  background-color: #0275d8;
+  color: white;
+  outline: 0;
+  box-shadow: none!important;
+}
+.btn {
+  background-color: #0275d8;
+  color: white;
+  display:inline-block;
+  font-size: 13px;
+}
+input[type="file"] {
+  display: none;
+}
+button.mat-mini-fab.af {
+  opacity: 0;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-transition: opacity .5s ease-in-out;
+  -moz-transition: opacity .5s ease-in-out;
+  -ms-transition: opacity .5s ease-in-out;
+  -o-transition: opacity .5s ease-in-out;
+  transition: opacity .5s ease-in-out;
+}
+.box:hover > .mat-mini-fab.af {
+  zoom: 1;
+  filter: alpha(opacity=50);
+  opacity: 1;
+}
+mat-card{
+  margin: 0 !important;
+  padding: 0px;
+}
+.pic {
+  margin-left:auto;
+  margin-right:auto;
+  display:block;
+}
+.box {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  max-width: 150px;
+}

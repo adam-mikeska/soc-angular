@@ -1,0 +1,496 @@
+<div class="container mt-5">
+  <div class="text-center">
+    <p class="header">E-SNEAKERS</p>
+    <hr class="xx">
+    <p class="thx">Thanks for choosing us!</p>
+  </div>
+
+  <mat-horizontal-stepper [linear]="true" #stepper (selectionChange)="stepChanged($event, stepper);">
+    <ng-template matStepperIcon="edit">
+      <mat-icon>done</mat-icon>
+    </ng-template>
+    <mat-step label="Cart" [completed]="cart?.cartItems?.length>0">
+      <hr *ngIf="cart?.cartItems?.length<1 ">
+      <table *ngIf="cart?.cartItems?.length>0" class="table table-borderless table-shopping-cart">
+        <thead>
+        <tr>
+          <th width="400px">Product</th>
+          <th width="200px">Quantity</th>
+          <th width="200px">Price</th>
+          <th class="text-center" width="200px">Remove</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="prdct" *ngFor="let cartitem of cart?.cartItems;let i=index">
+          <td >
+            <div class="itemside">
+              <a
+                [routerLink]="['/product/'+cartitem?.productOption.product.title]+'/'+cartitem?.productOption?.underTitle"><img
+                [src]="apiUrl+'products/image/'+cartitem?.productOption.product.title+'/'+cartitem.productOption.underTitle+'/'+cartitem?.productOption.productImages[0].image"
+                class="img-sm"></a>
+              <div class="info"><a
+                [routerLink]="['/product/'+cartitem?.productOption.product.title]+'/'+cartitem?.productOption?.underTitle"
+                class="title text-dark" data-abc="true">{{cartitem?.productOption.product.title}}
+                - {{cartitem?.productOption.underTitle}}</a>
+                <p
+                  class="text-muted small">{{ (cartitem?.productOption.product.brand === null ? null : "Brand: " + cartitem?.productOption.product.brand.name)}}
+                  <br>
+                  SIZE: {{cartitem.productSize}}
+                </p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <form #ca="ngForm" (ngSubmit)="ca.form.valid && updateCartItem(cartitem?.productOption.product.title,cartite.value,cartitem?.productOption.underTitle,cartitem?.productSize)">
+              <mat-form-field class="example-full-width">
+                <input #cartite="ngModel"
+                       [id]="'quantity'+[i]" [name]="'quantity'+[i]" type="number" matInput min="0"
+                       [ngModel]="cartitem.quantity"
+                       onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                       required>
+                <mat-error *ngIf="cartite.errors?.required">Cart item is required</mat-error>
+                <button matSuffix type="submit" mat-icon-button>
+                  <mat-icon style="color: #62a000">check</mat-icon>
+                </button>
+              </mat-form-field>
+            </form>
+          </td>
+          <td>
+            <div class="price-wrap">
+              <p
+                class="price">{{((cart?.coupon && cart?.coupon.discountType === 'PERCENTAGE' ? ((cartitem?.productOption.price-cartitem?.productOption.discount)*cartitem.quantity / 100) * (100 - cart?.coupon.discount) : ((cartitem?.productOption.price-cartitem?.productOption.discount)*cartitem.quantity))| number : '1.2-2') + ' €'}}</p>
+              <p *ngIf="cart?.coupon  && cart?.coupon.discountType==='PERCENTAGE'"
+                   class="price fr">{{((cartitem?.productOption.price-cartitem?.productOption.discount)*cartitem.quantity | number : '1.2-2') + ' €'}}</p>
+              <small
+                class="text-muted">
+                {{(cart?.coupon && cart?.coupon.discountType === 'PERCENTAGE' ? (((cartitem?.productOption.price - cartitem?.productOption.discount) / 100) * (100 - cart?.coupon.discount)) : (cartitem?.productOption.price - cartitem?.productOption.discount)) | number : '1.2-2' }}
+                € each </small>
+            </div>
+          </td>
+          <td class="text-center">
+            <button type="button" mat-icon-button class="mb-2"
+                    (click)="deleteCartItem(cartitem?.productOption.product.title,cartitem?.productOption.underTitle,cartitem?.productSize)">
+              <mat-icon color="warn">close</mat-icon>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div *ngIf="cart?.cartItems?.length<1" class="empty-cart">
+        <h2 class="mt-5">Cart is empty <i class="fas fa-frown fa-lg ml-1"></i></h2>
+      </div>
+      <hr *ngIf="cart?.cartItems?.length<1" class="mt-5">
+      <table class="table table-borderless tbl">
+        <tbody>
+        <tr class="">
+          <td width="120px">
+            Total price without tax
+          </td>
+          <td width="100px">
+            <p>{{((totalPrice-(cart?.cart_orderPayment ? cart?.cart_orderPayment.price: 0)-(cart?.cart_orderDelivery ? cart?.cart_orderDelivery.price : 0)) / 120) * 100 | number : '1.2-2'}} €
+          </td>
+          <td width="100px">
+          </td>
+          <td>
+            <div id="test" class="text-right">
+              <form (ngSubmit)="setCoupon(coupon)">
+
+                <mat-form-field *ngIf="cart?.coupon" appearance="outline">
+                  <mat-label>Coupon</mat-label>
+                  <input matInput type="text" [disabled]="true" [id]="'coupon'" name="coupon" [(ngModel)]="coupon">
+                </mat-form-field>
+
+                <mat-form-field *ngIf="!cart?.coupon" appearance="outline">
+                  <mat-label>Coupon</mat-label>
+                  <input matInput type="text" [disabled]="false" [id]="'coupon'" name="coupon" [(ngModel)]="coupon">
+                </mat-form-field>
+
+                <button type="submit" mat-flat-button color="primary" class="bbttnn ml-3">
+                  <mat-icon>{{cart?.coupon ? 'close' : 'done'}}</mat-icon>
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <tr class="">
+          <td width="120px">
+            Total price with tax
+          </td>
+          <td width="100px">
+            {{totalPrice-(cart?.cart_orderPayment ? cart?.cart_orderPayment.price: 0)-(cart?.cart_orderDelivery ? cart?.cart_orderDelivery.price : 0) | number : '1.2-2' }} €
+          </td>
+          <td width="100px">
+          </td>
+          <td>
+            <div class="text-right">
+              <button type="button" mat-flat-button class="bbttnn" color="primary" *ngIf="cart?.cartItems?.length>0"
+                      (click)="secondStepCheck()">
+                <mat-icon>arrow_right_alt</mat-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </mat-step>
+
+    <mat-step label="Delivery and Payment" [completed]="cart?.cart_orderDelivery && cart?.cart_orderPayment && cart?.cartItems?.length>0">
+      <form>
+        <div class="row">
+          <div class="col-lg mb-1">
+            <div [ngClass]="(!cart?.cart_orderDelivery)?'ff':'ff-done'">
+              <p class="ff-txt">1. Delivery</p>
+            </div>
+            <div class="ff-content">
+              <div class="row ajaj" *ngFor="let delivery of deliveries">
+                <div class="col-9">
+                  <mat-checkbox (click)="selectDelivery(delivery,$event)" color="primary"
+                                [checked]="delivery.title===cart?.cart_orderDelivery?.delivery">{{delivery.title.split("_").join(" ")}}</mat-checkbox>
+                </div>
+                <div class="col-3"
+                     [ngClass]="(delivery.price === 0 ||(cart?.coupon ?  cart?.coupon.discountType==='DELIVERY' : false))?'grn':'blck'">
+                  <div class="row justify-content-center">
+                    <p>{{delivery.price === 0 || (cart?.coupon ? cart?.coupon.discountType === 'DELIVERY' : false) ? "FREE" : (delivery.price  | number : '1.2-2') + ' €'}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-1 mb-1"></div>
+          <div class="col-lg mb-1">
+            <div [ngClass]="(!cart?.cart_orderPayment)?'ff':'ff-done'">
+              <p class="ff-txt">2. Payment</p>
+            </div>
+            <div class="ff-content">
+              <div class="row ajaj" *ngFor="let payment of payments">
+                <div class="col-9">
+                  <mat-checkbox (click)="selectPayment(payment,$event)" color="primary"
+                                [checked]="payment.title===cart?.cart_orderPayment?.payment">{{payment.title.split("_").join(" ")}}</mat-checkbox>
+                </div>
+                <div class="col-3" [ngClass]="(payment.price === 0)?'grn':'blck'">
+                  <div class="row justify-content-center">
+                    <p>{{payment.price === 0 ? "FREE" : (payment.price  | number : '1.2-2')+' €'}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <hr>
+      <table class="table table-borderless tbl">
+        <tbody>
+        <tr class="">
+          <td width="120px">
+            Total price without tax
+          </td>
+          <td width="100px">
+            <p>{{(totalPrice / 120) * 100 | number : '1.2-2'}} €
+          </td>
+          <td width="100px">
+          </td>
+          <td>
+          </td>
+        </tr>
+        <tr class="">
+          <td width="120px">
+            Total price with tax
+          </td>
+          <td width="100px">
+            {{totalPrice| number : '1.2-2' }} €
+          </td>
+          <td width="100px">
+          </td>
+          <td>
+            <div class="text-right">
+              <button (click)="refresh()" type="button" mat-flat-button class="bbttnn" color="primary"
+                      [routerLink]="['/cart']"
+                      matStepperPrevious>
+                <mat-icon>keyboard_backspace</mat-icon>
+              </button>
+              <button mat-flat-button type="button" class="ml-1 mt-1 bbttnn" color="primary" (click)="thirdStepCheck()"
+                      *ngIf="cart.cart_orderDelivery && cart.cart_orderPayment">
+                <mat-icon>arrow_right_alt</mat-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </mat-step>
+
+    <mat-step label="Delivery details" [completed]="false">
+      <div class="row">
+        <div class="col-lg-7 mb-3">
+          <form #deliver="ngForm" (ngSubmit)="deliver.form.valid && order()" id="deliver">
+            <div class="row">
+              <mat-form-field class="col-md-12">
+                <mat-label>Name</mat-label>
+                <input matInput type="text"
+                       id="name"
+                       name="name"
+                       [(ngModel)]="dap.name"
+                       #name="ngModel"
+                       maxlength="255"
+                       required>
+                <mat-error *ngIf="name.errors?.required">Name is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="row">
+              <mat-form-field class="col-6">
+                <mat-label>Email</mat-label>
+                <input matInput type="email"
+                       id="email"
+                       name="email"
+                       [(ngModel)]="dap.email"
+                       #email="ngModel"
+                       maxlength="255"
+                       pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{1,3})+$" required>
+                <mat-error *ngIf="email.errors?.pattern">Please enter valid email</mat-error>
+                <mat-error *ngIf="email.errors?.required">Email is required</mat-error>
+              </mat-form-field>
+              <mat-form-field class="col-6">
+                <mat-label>Tel. number</mat-label>
+                <input matInput type="tel"
+                       id="tel"
+                       name="tel"
+                       [(ngModel)]="dap.telNumber"
+                       #telNumber="ngModel"
+                       maxlength="255"
+                       pattern="\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*(\d{1,2})$"
+                       required>
+                <mat-error *ngIf="telNumber.errors?.pattern">Please enter valid number</mat-error>
+                <mat-error *ngIf="telNumber.errors?.required">Tel number is required</mat-error>
+                <br>
+              </mat-form-field>
+            </div>
+            <div class="row">
+              <mat-form-field class="col-6">
+                <mat-label>Street</mat-label>
+                <input matInput type="text"
+                       id="address"
+                       name="address"
+                       [(ngModel)]="dap.address"
+                       #address="ngModel"
+                       maxlength="255"
+                       required>
+                <mat-error *ngIf="address.errors?.required">Street is required</mat-error>
+              </mat-form-field>
+              <mat-form-field class="col-6">
+                <mat-label>City</mat-label>
+                <input matInput type="text"
+                       id="city"
+                       name="city"
+                       [(ngModel)]="dap.city"
+                       #city="ngModel"
+                       maxlength="255"
+                       required>
+                <mat-error *ngIf="city.errors?.required">City is required</mat-error>
+                <br>
+              </mat-form-field>
+            </div>
+            <div class="row">
+              <mat-form-field class="col-6">
+                <mat-label>Country</mat-label>
+                <input matInput type="text"
+                       id="country"
+                       name="country"
+                       [(ngModel)]="dap.country"
+                       #country="ngModel"
+                       maxlength="255"
+                       required>
+                <mat-error *ngIf="country.errors?.required">Postal code is required</mat-error>
+              </mat-form-field>
+              <mat-form-field class="col-6">
+                <mat-label>Postcode</mat-label>
+                <input matInput type="text"
+                       id="postcode"
+                       name="postcode"
+                       [(ngModel)]="dap.postalCode"
+                       #postalCode="ngModel"
+                       maxlength="255"
+                       required>
+                <mat-error *ngIf="postalCode.errors?.required">Postal code is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="row">
+              <mat-form-field style="min-width: 100%" class="col-12">
+                <mat-label>Note</mat-label>
+                <textarea matInput type="text"
+                          id="note"
+                          name="note"
+                          [(ngModel)]="dap.note"
+                          #note="ngModel"
+                          maxlength="255"></textarea>
+              </mat-form-field>
+            </div>
+            <mat-checkbox class="mt-5" *ngIf="isUserLoggedIn()" color="primary"
+                          [checked]="saveInfoForNextOrder"
+                          (change)="saveInfoForNextOrder=!saveInfoForNextOrder">Please select this field if you want to
+              save delivery informations for next order!
+            </mat-checkbox>
+          </form>
+        </div>
+        <div class="col-lg-5 mb-3">
+          <div class="da">
+            <div *ngFor="let cartitem of cart?.cartItems" class="row cart-detail">
+              <div class="col-lg-3 col-sm-3 col-3 cart-detail-img">
+                <a
+                  [routerLink]="['/product/'+cartitem?.productOption.product.title]+'/'+cartitem?.productOption?.underTitle">
+                  <img
+                       [src]="apiUrl+'products/image/'+cartitem?.productOption.product.title+'/'+cartitem.productOption.underTitle+'/'+cartitem?.productOption.productImages[0].image"></a>
+              </div>
+              <div class="col-lg-3 col-sm-3 col-3 cart-detail-product">
+                <a
+                  [routerLink]="['/product/'+cartitem?.productOption.product.title]+'/'+cartitem?.productOption?.underTitle">
+                  <p>{{cartitem.productOption.product.title}}
+                    - {{cartitem.productOption.underTitle}}</p></a>
+                <p *ngIf="cartitem.productOption.product.brand" style="font-size: 12px;color: #535353">Brand
+                  : {{cartitem.productOption.product.brand.name}}</p>
+                <p style="font-size: 12px;color: #535353">Size : {{cartitem.productSize}}</p>
+              </div>
+              <div class="col-lg-2 col-sm-2 col-2 cart-detail-product"><span
+                class="count"> Qty x {{cartitem.quantity}}</span>
+              </div>
+              <div class="col-lg-4 col-sm-4 col-4 cart-detail-product">
+                <span
+                  class="price">  {{((cart?.coupon && cart?.coupon.discountType === 'PERCENTAGE' ? ((cartitem?.productOption.price-cartitem?.productOption.discount)*cartitem.quantity / 100) * (100 - cart?.coupon.discount) : (cartitem?.productOption.price-cartitem?.productOption.discount)*cartitem.quantity) | number : '1.2-2') + '  €'}} </span>
+                <br>
+                <span *ngIf="cart?.coupon && cart?.coupon.discountType==='PERCENTAGE'"
+                      class="price fr">  {{((cartitem?.productOption.price-cartitem?.productOption.discount)*cartitem.quantity | number : '1.2-2') + ' €'}}</span>
+              </div>
+            </div>
+            <hr class="hrOnResize">
+            <div
+              class="row cart-detail1 mb-2">
+              <div class="col-lg-3 col-sm-3 col-3 cart-detail-img1">
+                <i class="fas fa-credit-card ml-5" style="font-size: 21px"></i>
+              </div>
+              <div class="col-lg-5 col-sm-5 col-5 cart-detail-product1">
+                <a>
+                  <p>{{cart?.cart_orderPayment?.payment.split("_").join(" ")}}</p></a>
+              </div>
+              <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+                <a>
+                  <span class="price">  {{cart?.cart_orderPayment?.price === 0 ? 'FREE' : (cart?.cart_orderPayment?.price  | number : '1.2-2') + ' €' }}</span>
+                </a>
+              </div>
+            </div>
+            <div class="row cart-detail1 mb-4">
+              <div class="col-lg-3 col-sm-3 col-3 cart-detail-img1">
+                <i class="fas fa-truck ml-5" style="font-size: 21px"></i>
+              </div>
+              <div class="col-lg-5 col-sm-5 col-5 cart-detail-product1">
+                <a>
+                  <p>{{cart?.cart_orderDelivery?.delivery !== null ? cart?.cart_orderDelivery?.delivery.split("_").join(" ") : ""}}</p></a>
+              </div>
+              <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+                <a>
+                  <span
+                    class="price">  {{cart?.cart_orderDelivery?.price === 0 ? 'FREE' : (cart?.cart_orderDelivery?.price   | number : '1.2-2') + ' €' }}</span>
+                </a>
+              </div>
+            </div>
+            <hr *ngIf="cart?.coupon" style="width: 92%;margin-top: 25px">
+            <div *ngIf="cart?.coupon" class="row cart-detail1 mb-3">
+              <div class="col-lg-3 col-sm-3 col-3 cart-detail-img1">
+                <i class="fas fa-gift" style="font-size: 21px;margin-left: 40px"></i>
+              </div>
+              <div class="col-lg-5 col-sm-5 col-5 cart-detail-product1">
+                <a>
+                  <p> Coupon - {{cart?.coupon.code}}</p></a>
+              </div>
+              <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+                <a>
+                  <span
+                    class="price">  {{ (!cart?.coupon.discount ? '' : '-' + (cart?.coupon.discount | number : '1.2-2')) + ' ' + (cart?.coupon.discountType === 'PERCENTAGE' ? '%' : (cart?.coupon.discountType === 'TOTAL' ? "€" : "FREE DELIVERY"))}}</span></a>
+              </div>
+            </div>
+            <hr style="margin-top: 25px">
+            <div
+              class="row cart-detail1 {{cart?.coupon && cart?.coupon.discountType==='PERCENTAGE' && totalPrice>0 || cart?.coupon && cart?.coupon.discountType==='TOTAL' && totalPrice>0 ? 'mb-3' : ''}}">
+              <div class="col-lg-3 col-sm-3 col-3 cart-detail-img1">
+
+              </div>
+              <div class="col-lg-5 col-sm-5 col-5 cart-detail-product1">
+                <a>
+                  <p>Total price without tax: </p></a>
+              </div>
+              <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+                <a>
+                  <span
+                    class="price">  {{((totalPrice / 120) * 100  | number : '1.2-2') }} €</span>
+                  <br>
+                  <span *ngIf="cart?.coupon && cart?.coupon.discountType==='PERCENTAGE' && totalPrice>0 "
+                        class="price fr"> {{(((((totalPrice / (100 - cart?.coupon.discount)) * 100) / 120) * 100) | number : '1.2-2') + ' €' }}</span>
+                  <span *ngIf="cart?.coupon && cart?.coupon.discountType==='TOTAL' && totalPrice>0 "
+                        class="price fr"> {{(((totalPrice + cart?.coupon.discount) / 120) * 100 | number : '1.2-2') + ' €' }}</span>
+                </a>
+              </div>
+            </div>
+            <div class="row cart-detail1 mb-4">
+              <div class="col-lg-3 col-sm-3 col-3 cart-detail-img1">
+
+              </div>
+              <div class="col-lg-5 col-sm-5 col-5 cart-detail-product1">
+                <a>
+                  <p>Total price: </p></a>
+              </div>
+              <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
+                <a>
+                  <span class="price">  {{((totalPrice)  | number : '1.2-2') }} €</span>
+                  <br>
+                  <span *ngIf="cart?.coupon && cart?.coupon.discountType==='PERCENTAGE' && totalPrice>0"
+                        class="price fr"> {{(((totalPrice / (100 - cart?.coupon.discount)) * 100)  | number : '1.2-2') + ' €' }}</span>
+                  <span *ngIf="cart?.coupon && cart?.coupon.discountType==='TOTAL' && totalPrice>0"
+                        class="price fr"> {{((totalPrice + cart?.coupon.discount)  | number : '1.2-2') + ' €' }}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <table class="table table-borderless tbl">
+        <tbody>
+        <tr class="">
+          <td width="120px">
+            Total price without tax
+          </td>
+          <td width="100px">
+            {{(totalPrice / 120) * 100 | number : '1.2-2' }}€
+          </td>
+          <td width="100px">
+          </td>
+          <td>
+          </td>
+        </tr>
+        <tr class="">
+          <td width="120px">
+            Total price with tax
+          </td>
+          <td width="100px">
+            {{totalPrice| number : '1.2-2' }}€
+          </td>
+          <td width="100px">
+          </td>
+          <td>
+            <div class="text-right">
+              <button type="button" mat-flat-button class="bbttnn" color="primary" (click)="refresh()"
+                      matStepperPrevious
+                      [routerLink]="['/cart']"
+                      [queryParams]="{step: 1}">
+                <mat-icon>keyboard_backspace</mat-icon>
+              </button>
+              <button form="deliver" type="submit" mat-flat-button class="ml-1 mt-1 bbttnn" color="primary">
+                <mat-icon>done</mat-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </mat-step>
+
+  </mat-horizontal-stepper>
+</div>

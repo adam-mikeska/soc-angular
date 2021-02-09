@@ -1,0 +1,33 @@
+mat-card{
+  margin: 0 !important;
+  padding: 0px;
+}
+table {
+  width: 100%;
+}
+
+@media(max-width: 600px) {
+  .mat-header-row {
+    display: none;
+  }
+  .mat-column-id{
+    padding: 0 !important;
+  }
+}
+
+.akcie {
+  font-size: 20px;
+  vertical-align: bottom;
+  cursor: pointer;
+}
+.akcie:focus {
+  outline: 0px solid transparent;
+}
+a {
+  color: #0683bd;
+  text-decoration: none;
+}
+a:hover {
+  color: #026d93;
+  text-decoration: none;
+}

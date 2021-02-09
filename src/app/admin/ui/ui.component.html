@@ -1,0 +1,167 @@
+<mat-card style="margin-bottom:2em;">
+  <p class="h3">Deliveries</p>
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let delivery of deliveries;let i=index" [disabled]="!user?.role?.permissions.includes('update_delivery') && !user?.role?.permissions.includes('*')">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{delivery.title.split("_").join(" ")}}
+        </mat-panel-title>
+        <mat-panel-description>
+
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <form #f="ngForm" (ngSubmit)="f.form.valid && updateDelivery(delivery.id,delivery.price)">
+        <mat-form-field class="w-100">
+          <mat-label>Title</mat-label>
+          <input [disabled]="true"
+                 name="title_delivery{{i}}" id="title_delivery{{i}}" matInput type="text"
+                 [(ngModel)]="delivery.title"
+                 #title_delivery="ngModel"
+                 [ngClass]="{ 'is-invalid': f.submitted && title_delivery.invalid }"
+                 maxlength="255"
+                 required>
+          <mat-error *ngIf="title_delivery.errors?.required">Title is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-100">
+          <mat-label>Price</mat-label>
+          <input min="0" onkeydown="return event.keyCode !== 69 && event.keyCode !== 189" name="title_price{{i}}"
+                 id="title_price{{i}}" matInput type="number"
+                 [(ngModel)]="delivery.price"
+                 #price_delivery="ngModel"
+                 required>
+          <mat-error *ngIf="price_delivery.errors?.required">Price is required</mat-error>
+        </mat-form-field>
+        <div class="row">
+          <button type="submit" [disabled]="!f.valid " mat-raised-button color="primary" class="mr-auto ml-4 mt-4 "><i
+            class="fas fa-save mr-1"></i> Update
+          </button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <p class="h3 mt-4">Payments</p>
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let payment of payments;let i=index" [disabled]="!user?.role?.permissions.includes('update_payment') && !user?.role?.permissions.includes('*')">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{payment.title.split("_").join(" ")}}
+        </mat-panel-title>
+        <mat-panel-description>
+
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <form #f="ngForm" (ngSubmit)="f.form.valid && updatePayment(payment.id,payment.price)">
+        <mat-form-field class="w-100">
+          <mat-label>Title</mat-label>
+          <input [disabled]="true"
+                 name="title_payment{{i}}" id="title_payment{{i}}" matInput type="text"
+                 [(ngModel)]="payment.title"
+                 #title_payment="ngModel"
+                 [ngClass]="{ 'is-invalid': f.submitted && title_payment.invalid }"
+                 maxlength="255"
+                 required>
+          <mat-error *ngIf="title_payment.errors?.required">Title is required</mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-100">
+          <mat-label>Price</mat-label>
+          <input min="0" onkeydown="return event.keyCode !== 69 && event.keyCode !== 189" name="price_payment{{i}}"
+                 id="price_payment{{i}}" matInput type="number"
+                 [(ngModel)]="payment.price"
+                 #price_payment="ngModel" required>
+          <mat-error *ngIf="price_payment.errors?.required">Price is required</mat-error>
+        </mat-form-field>
+        <div class="row">
+          <button type="submit" [disabled]="!f.valid " mat-raised-button color="primary" class="mr-auto ml-4 mt-4 "><i
+            class="fas fa-save mr-1"></i> Update
+          </button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <div class="d-flex mb-2">
+    <p class="h3 mt-4">Carousel</p>
+    <button [disabled]="!user.role.permissions.includes('add_carousel') && !user.role.permissions.includes('*')" (click)="addCarousel()" mat-mini-fab color="primary" class="mt-3 ml-2">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <div data-interval="false" id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#carouselExampleCaptions" *ngFor="let item of carousel;let index = index"
+          [attr.data-slide-to]="index"></li>
+    </ol>
+    <div class="carousel-inner">
+      <div class="carousel-item" *ngFor="let item of carousel;let index = index" [ngClass]="{active:index===0}">
+        <img [src]="apiUrl+'products/carousel/image/'+item.image" class="d-block w-100 ci" [alt]="item.text">
+        <div class="carousel-caption">
+          <form #f="ngForm" (ngSubmit)="f.form.valid && updateCarousel(item.id,item)">
+            <mat-form-field style="width: 100%">
+              <mat-label>Text</mat-label>
+              <input [disabled]="!user.role.permissions.includes('update_carousel') && !user.role.permissions.includes('*')" #text_carousel="ngModel" id="carousel_text{{index}}" name="carousel_text{{index}}" matInput [(ngModel)]="item.text" required>
+              <mat-error *ngIf="text_carousel.errors?.required">Text is required</mat-error>
+            </mat-form-field>
+            <mat-form-field style="width: 100%">
+              <mat-label>Link</mat-label>
+              <input [disabled]="!user.role.permissions.includes('update_carousel') && !user.role.permissions.includes('*')"  #link_carousel="ngModel" id="carousel_link{{index}}" name="carousel_link{{index}}" matInput [(ngModel)]="item.link" required>
+              <mat-error *ngIf="link_carousel.errors?.required">Link is required</mat-error>
+            </mat-form-field>
+            <div class="row">
+              <button [disabled]="!user.role.permissions.includes('update_carousel') && !user.role.permissions.includes('*')" type="submit" mat-raised-button color="primary" class="mr-auto mt-4 ml-4"><i
+                class="fas fa-save mr-1"></i> Update
+              </button>
+              <button [disabled]="!user.role.permissions.includes('delete_carousel') && !user.role.permissions.includes('*')" (click)="confirmDeleteCarousel(item.id)" type="button" mat-raised-button color="warn"
+                      class="ml-auto mt-4 mr-4"><i
+                class="fas fa-trash mr-1"></i> Delete
+              </button>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+  <div class="d-flex mb-2">
+    <p class="h3 mt-4">Alerts</p>
+    <button [disabled]="!user.role.permissions.includes('add_alert') && !user.role.permissions.includes('*')" (click)="addAlert()" mat-mini-fab color="primary" class="mt-3 ml-2">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <div *ngFor="let alert of alerts;let i=index" class="pb-0 text-dark mb-1 alert alert-dismissible fade show"
+       [ngStyle]="{'background-color':alert.color}"
+       role="alert">
+    <form #f="ngForm" (ngSubmit)="f.form.valid && updateAlert(alert.id,alert)">
+      <div class="row">
+        <div class="col-md-10">
+          <mat-form-field style="width: 100%">
+            <mat-label>Text</mat-label>
+            <input [disabled]="!user.role.permissions.includes('update_alert') && !user.role.permissions.includes('*')" #text_alert="ngModel" id="text_alert{{i}}" name="text_alert{{i}}" matInput [(ngModel)]="alert.text" required>
+            <mat-error *ngIf="text_alert.errors?.required">Text is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-1">
+          <mat-form-field style="width: 100%">
+            <mat-label>Color</mat-label>
+            <input [disabled]="!user.role.permissions.includes('update_alert') && !user.role.permissions.includes('*')" #color_alert="ngModel" id="color_alert{{i}}" name="color_alert{{i}}" matInput [(colorPicker)]="alert.color" [cpPosition]="'top-left'"
+                   [(ngModel)]="alert.color" required>
+            <mat-error *ngIf="color_alert.errors?.required">Color is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-md-1">
+          <button [disabled]="!user.role.permissions.includes('update_alert') && !user.role.permissions.includes('*')" type="submit" mat-raised-button color="primary" class="mb-2 "><i
+            class="fas fa-save mr-1"></i> Update
+          </button>
+        </div>
+      </div>
+    </form>
+    <button [disabled]="!user.role.permissions.includes('delete_alert') && !user.role.permissions.includes('*')" (click)="confirmDeleteAlert(alert.id)" type="button" class="close">
+      <span>&times;</span>
+    </button>
+  </div>
+</mat-card>

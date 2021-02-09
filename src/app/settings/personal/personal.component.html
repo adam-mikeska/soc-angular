@@ -1,0 +1,150 @@
+<mat-card>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12">
+        <p class="h2 text-center">Your profile</p>
+        <hr>
+      </div>
+    </div>
+        <div class="form-group row mb-4">
+          <div *ngIf="imagee" class="box">
+            <img [src]="imagee">
+            <button class="af" style="left: 50%"  type="button" mat-mini-fab color="primary" (click)="openInput()">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <input #myFileInput (change)="selectFile($event)" id="fileInput" hidden type="file"  name="file" accept="image/*">
+          </div>
+        </div>
+        <form  #f="ngForm" (ngSubmit)="f.form.valid && updateUser(request)">
+          <div class="form-group row">
+            <label for="name" class="col-3 col-form-label">Personal</label>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <mat-label>Name</mat-label>
+                <input matInput type="text"
+                       [(ngModel)]="request.name"
+                       #name="ngModel"
+                       id="name"
+                       name="name"
+                       maxlength="255"
+                       required>
+                <mat-error *ngIf="name.errors?.required">Name is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <mat-label>Gender</mat-label>
+                <mat-select id="gender" matNativeControl required [(ngModel)]="request.gender" name="gender">
+                  <mat-option disabled hidden>Pick one</mat-option>
+                  <mat-option value="Male">Male</mat-option>
+                  <mat-option value="Female">Female</mat-option>
+                </mat-select >
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="email" class="col-3 col-form-label">Contact</label>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <mat-label>Email</mat-label>
+                <input matInput type="email"
+                       [(ngModel)]="request.email"
+                       #email="ngModel"
+                       id="email"
+                       name="email"
+                       required
+                       maxlength="255"
+                       required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$"/>
+                <mat-error *ngIf="email.errors?.required">Email is required</mat-error>
+                <mat-error *ngIf="email.errors?.pattern">Please enter valid email</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <mat-label>Tel. number (International format)</mat-label>
+                <input matInput type="tel"
+                       [(ngModel)]="request.telNumber"
+                       #telNumber="ngModel"
+                       id="telNumber"
+                       name="telNumber"
+                       maxlength="255"
+                       pattern="\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*\d\W*(\d{1,2})$">
+                <mat-error *ngIf="telNumber.errors?.pattern">Please enter valid number</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="country" class="col-3 col-form-label">Address</label>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <mat-label>Country</mat-label>
+                <input matInput type="text"
+                       [(ngModel)]="request.country"
+                       #country="ngModel"
+                       id="country"
+                       name="country"
+                       maxlength="255"/>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <mat-label>City</mat-label>
+                <input matInput type="text"
+                       [(ngModel)]="request.city"
+                       #city="ngModel"
+                       id="city"
+                       name="city"
+                       maxlength="255"/>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="country" class="col-3 col-form-label"></label>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <mat-label>Address</mat-label>
+                <input matInput type="text"
+                       [(ngModel)]="request.address"
+                       #address="ngModel"
+                       id="address"
+                       name="address"
+                       maxlength="255"/>
+              </mat-form-field>
+            </div>
+            <div class="col-4">
+              <mat-form-field class="w-100">
+                <mat-label>Postal code</mat-label>
+                <input matInput type="text"
+                       [(ngModel)]="request.postalCode"
+                       #postalCode="ngModel"
+                       id="postalCode"
+                       name="postalCode"
+                       maxlength="255"/>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="publicinfo" class="col-3 col-form-label">Public Info</label>
+            <div class="col-8">
+              <mat-form-field class="w-100">
+                <mat-label>Public info</mat-label>
+                  <textarea  matInput type="text"
+                             [(ngModel)]="request.publicInfo"
+                             #publicInfo="ngModel"
+                             id="publicinfo"
+                             name="publicinfo"
+                             maxlength="2555"
+                             ols="40" rows="4"> </textarea>
+                <mat-error *ngIf="publicInfo.errors?.maxlength">Max length exceeded</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="offset-4 col-7 ">
+              <button type="submit" mat-raised-button color="primary"><i class="fas fa-save mr-2"></i>Update my personal info</button>
+            </div>
+          </div>
+        </form>
+
+  </div>
+</mat-card>

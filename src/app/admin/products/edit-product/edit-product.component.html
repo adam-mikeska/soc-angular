@@ -1,0 +1,197 @@
+<p class="h2 text-center">Edit product</p>
+<hr>
+<form #f="ngForm" (ngSubmit)=" f.form.valid && updateProduct(data.id,rqst)">
+  <div class="form-group row">
+    <div class="col-6">
+      <mat-form-field class="w-100">
+        <mat-label>Title</mat-label>
+        <input matInput type="text"
+               id="title"
+               name="title"
+               (input)="update()"
+               [(ngModel)]="rqst.title"
+               #title="ngModel"
+               maxlength="255"
+               [matAutocomplete]="auto"
+               required>
+        <mat-error *ngIf="title.errors?.required">Title is required</mat-error>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option (onSelectionChange)="onProductSelect(product)"  *ngFor="let product of filteredProducts " [value]="product.title">
+            {{ product.title }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col-6">
+      <mat-form-field class="w-100">
+        <mat-label>Undertitle</mat-label>
+        <input matInput type="text"
+               id="undertitle"
+               name="undertitle"
+               [(ngModel)]="rqst.underTitle"
+               #underTitle="ngModel"
+               maxlength="255"
+               required>
+        <mat-error *ngIf="underTitle.errors?.required">Undertitle is required</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-6">
+      <mat-form-field class="w-100">
+        <mat-label>Price</mat-label>
+        <input matInput type="number"
+               id="price"
+               name="price"
+               [(ngModel)]="rqst.price"
+               #price="ngModel"
+               min="0" onkeydown="return event.keyCode !== 69 && event.keyCode !== 189"
+               required>
+        <mat-error *ngIf="price.errors?.required">Price is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-6">
+      <mat-form-field class="w-100">
+        <mat-label>Discount</mat-label>
+        <input matInput type="number"
+               id="discount"
+               name="discount"
+               [(ngModel)]="rqst.discount"
+               #discount="ngModel"
+               min="0" onkeydown="return event.keyCode !== 69 && event.keyCode !== 189">
+        <mat-error *ngIf="discount.hasError('max')">Discount cannot be higher than price!</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-6">
+      <mat-form-field class="w-100">
+        <mat-label>Category</mat-label>
+        <input matInput type="text"
+               id="category"
+               name="category"
+               (input)="updateCategories()"
+               [(ngModel)]="rqst.category"
+               maxlength="255"
+               [matAutocomplete]="categ">
+        <mat-autocomplete #categ="matAutocomplete">
+          <mat-option *ngFor="let category of filteredCategories " (onSelectionChange)="onCategorySelect(category)" [value]="wrd(category,category.name).split('-')[0].trim()">
+            {{wrd(category,category.name)}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <div class="col-6">
+      <mat-form-field class="w-100">
+        <mat-label>Parent categories</mat-label>
+        <input matInput type="text"
+               id="upperCategories"
+               name="upperCategories"
+               maxlength="255"
+               [value]="ctgr"
+               [disabled]="true"
+               required>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-6">
+      <mat-form-field class="w-100">
+        <mat-label>Brand(Only for new product)</mat-label>
+        <input matInput type="text"
+               id="brand"
+               name="brand"
+               (input)="updateBrands()"
+               [(ngModel)]="rqst.brand"
+               #brand="ngModel"
+               maxlength="255"
+               [matAutocomplete]="brandd">
+        <mat-autocomplete #brandd="matAutocomplete">
+          <mat-option *ngFor="let brand of filteredBrands " [value]="brand">
+            {{ brand }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-6">
+      <mat-slide-toggle (change)="enableDisableSale(data.id);data.enabled=!data.enabled" color="primary" [checked]="data.enabled">{{data.enabled? 'Close sale':'Enable sale'}}</mat-slide-toggle>
+    </div>
+  </div>
+  <hr>
+  <div *ngFor="let numFdvs of formFields;let i=index" class="form-group row">
+    <div class="col-3">
+      <mat-form-field class="w-100">
+        <mat-label>Size</mat-label>
+        <input matInput type="text"
+               [(ngModel)]="numFdvs.productSize.size"
+               [id]="'size'+i"
+               [name]="'size'+i"
+               #size="ngModel" required>
+        <mat-error *ngIf="size.errors?.required">Size is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-3">
+      <mat-form-field class="w-100">
+        <mat-label>On stock</mat-label>
+        <input matInput type="number"
+               [(ngModel)]="numFdvs.productSize.onStock"
+               [id]="'onStock'+i"
+               [name]="'onStock'+i"
+               #onStock="ngModel"
+               step="0"
+               min="0" onkeydown="return event.keyCode !== 190" oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null"
+               required>
+        <mat-error *ngIf="onStock.errors?.required">On stock is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <button (click)="numFdvs.isNew ? addProductSize(data.id,numFdvs.productSize.size,numFdvs.productSize.onStock) : updateProductSize(this.data.id,numFdvs.productSize.id,numFdvs.productSize.size,numFdvs.productSize.onStock)" class="mr-1" type="button"  mat-mini-fab color="success">
+        <mat-icon>done</mat-icon>
+      </button>
+      <button class="mr-1" type="button"  *ngIf="data.productSizes.length>1 " (click)="confirmDeleteProductSize(numFdvs.productSize.id,data.underTitle,data.product.title,numFdvs)" mat-mini-fab color="warn">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button  type="button" *ngIf="i===0" (click)="add()" mat-mini-fab color="primary">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <label for="file-upload" class="col-3 col-form-label"><p>Images</p></label>
+    <div class="col-6">
+      <label for="file-upload" class="custom-file-upload  mt-3">
+        <i class="fas fa-cloud-upload-alt"></i> Add images
+      </label>
+      <input #myFileInput id="file-upload" type="file" name="file-upload" multiple (change)="selectFiles($event)"
+             accept="image/*"/>
+    </div>
+  </div>
+  <hr>
+  <div class="row imdiv">
+    <div *ngFor="let img of data.productImages;let i=index" class="box">
+      <img class="imagee" [src]="apiUrl+'products/image/'+data.product.title+'/'+data.underTitle+'/'+img.image" height="200">
+      <button *ngIf="data.productImages.length>1" type="button" (click)="ConfirmDeleteImage(img.id)" mat-mini-fab color="warn" class="af" [ngStyle]="data.productImages.length>1 && { 'left': '65%' }">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button class="af" [ngStyle]="data.productImages.length>1 && { 'left': '35%' }" (click)="openInput(i)" type="button" mat-mini-fab color="primary">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <input (change)="selectFile(data.id,img.id,$event)" id="fileInput{{i}}" hidden type="file"  name="file{{i}}" accept="image/*">
+    </div>
+  </div>
+  <hr>
+  <div class="form-group row">
+    <div class="col-12">
+      <ckeditor [config]="editorConfig" [(ngModel)]="rqst.description" [editor]="Editor" name="content" id="content"
+                (ready)="onReady($event)"></ckeditor>
+    </div>
+  </div>
+    <div class="text-center col ">
+      <button type="submit" mat-raised-button color="primary"><i class="fas fa-save mr-2"></i>Edit product</button>
+  </div>
+</form>
+
