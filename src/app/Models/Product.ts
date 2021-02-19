@@ -68,9 +68,17 @@ export interface Alert{
   color:string;
 }
 
-export interface Carousel{
+export interface CarouselImage{
   id:number;
   text:string;
   link:string;
   image:string;
+}
+
+export interface DashboardDTO{
+  totalUsers:number;
+  totalProducts:number;
+  totalCompletedOrders:number;
+  last7daysUsers: number[];
+  last7daysOrders:number[];
 }

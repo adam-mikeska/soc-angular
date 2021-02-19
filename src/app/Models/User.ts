@@ -4,24 +4,21 @@ export interface User {
   id: number;
   name: string;
   email: string;
-  role: Role;
-  nonLocked: string;
   password: string;
   postalCode: string;
   address: string;
   country : string;
   city : string;
   telNumber: string;
-  lockedTill: string;
-  enabled: boolean;
-  twoPhVerEnabled: boolean;
   registrationDate: string;
   gender: string;
-  publicInfo: string;
   image: string;
-  pastEmails: string;
+  lockedTill: string;
+  nonLocked: boolean;
+  enabled: boolean;
+  twoPhVerEnabled: boolean;
   cart: Cart;
-  orders:Order[];
+  role: Role;
 }
 
 export interface Role {
@@ -57,7 +54,6 @@ export interface Order {
   created: string;
   orderState: string;
   totalPrice: number;
-  orderChanges: string;
   note:string;
   paymentDetails:string;
   cart_orderDelivery:Cart_OrderDelivery;

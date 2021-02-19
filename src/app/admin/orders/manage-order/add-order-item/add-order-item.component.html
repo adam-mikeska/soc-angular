@@ -1,0 +1,55 @@
+<p class="h2 text-center">Add order item</p>
+<hr width="95%">
+<form #f="ngForm" (ngSubmit)="f.form.valid && addOrderItem()">
+  <div class="form-group row justify-content-center">
+    <div class="col-md-2">
+      <mat-form-field class="w-100">
+        <mat-label>Product</mat-label>
+        <input name="product" id="product" matInput type="text"
+               [(ngModel)]="request.product"
+               #product="ngModel"
+               maxlength="255"
+               required>
+        <mat-error *ngIf="product.errors?.required">Product is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-2">
+      <mat-form-field class="w-100">
+        <mat-label>Under title</mat-label>
+        <input matInput type="text"
+               name="underTitle" id="underTitle"
+               [(ngModel)]="request.underTitle"
+               #underTitle="ngModel"
+               maxlength="255" required>
+        <mat-error *ngIf="underTitle.errors?.required">Undertitle is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-2">
+      <mat-form-field class="w-100">
+        <mat-label>Size</mat-label>
+        <input matInput type="text"
+               name="size" id="size"
+               [(ngModel)]="request.size"
+               #size="ngModel"
+               maxlength="255" required>
+        <mat-error *ngIf="size.errors?.required">Size is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-2">
+      <mat-form-field class="w-100">
+        <mat-label>Quantity</mat-label>
+        <input matInput type="number"
+               name="quantity" id="quantity"
+               [(ngModel)]="request.quantity"
+               #quantity="ngModel"
+               maxlength="255" required>
+        <mat-error *ngIf="quantity.errors?.required">Quantity is required</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-md-2">
+      <button class="mt-3" mat-raised-button color="primary"><i
+        class="fas fa-plus mr-1"></i> Add
+      </button>
+    </div>
+    </div>
+</form>

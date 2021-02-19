@@ -92,7 +92,7 @@ export class NavigationComponent implements OnInit {
 
     this.apiService.cast.subscribe(user => {
       if (user) {
-        this.isAdmin = user?.role?.permissions.includes('display_users') || user?.role?.permissions.includes('display_products') || user?.role?.permissions.includes('display_products') || user.role?.permissions.includes('display_orders') || user.role?.permissions.includes('display_roles') || user.role?.permissions.includes('display_brands') || user.role?.permissions.includes('display_categories') || user.role?.permissions.includes('display_coupons') || user.role?.permissions.includes('display_others') || user.role?.permissions.includes('*');
+        this.isAdmin = user?.role?.permissions.includes('display_users') || user?.role?.permissions.includes('display_products') || user?.role?.permissions.includes('display_products') || user.role?.permissions.includes('display_orders') || user.role?.permissions.includes('display_roles') || user.role?.permissions.includes('display_brands') || user.role?.permissions.includes('display_categories') || user.role?.permissions.includes('display_coupons') || user.role?.permissions.includes('display_dashboard') || user.role?.permissions.includes('*');
       }
       this.user = user;
     });

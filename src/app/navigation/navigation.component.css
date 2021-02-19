@@ -171,6 +171,6 @@ a {
   width: 25px;
   margin-right: 4px;
 }
-:host ::ng-deep .mat-autocomplete-panel {
+::ng-deep .mat-autocomplete-panel {
   max-height: 512px !important;
 }

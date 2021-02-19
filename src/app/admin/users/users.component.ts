@@ -108,7 +108,7 @@ export class UsersComponent implements OnInit {
   }
 
   openDialogViewUser(row) {
-    this.matDialog.open(ViewUserComponent, {data: row, height: '950px', width: '750px',}).afterClosed().subscribe(
+    this.matDialog.open(ViewUserComponent, {data: row, minHeight: '850px', width: '700px',}).afterClosed().subscribe(
       res => {
       }
     );
@@ -125,7 +125,7 @@ export class UsersComponent implements OnInit {
       data: {
         selected: this.selectedFileIds,
       },
-      width: '900px',
+      width: '700px',
     }).afterClosed().subscribe(
       res => {
         if (res) {
@@ -150,7 +150,7 @@ export class UsersComponent implements OnInit {
       data: {
         selected: this.selectedFileIds,
       },
-      width: '900px',
+      width: '700px',
     }).afterClosed().subscribe(
       res => {
         if (res) {
@@ -184,7 +184,7 @@ export class UsersComponent implements OnInit {
       data: {
         selected: this.selectedFileIds
       },
-      width: '900px',
+      width: '700px',
     }).afterClosed().subscribe(
       res => {
         if (res) {

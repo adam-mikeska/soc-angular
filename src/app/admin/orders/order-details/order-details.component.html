@@ -21,9 +21,9 @@
     <th>Payment:</th>
     <td>{{order?.cart_orderPayment.payment.split("_").join(" ")}}</td>
   </tr>
-  <tr *ngIf=" paymentDetails">
+  <tr *ngIf="order.paymentDetails">
     <th>Payment details:</th>
-    <td><p *ngFor="let dtl of paymentDetails">{{dtl}}</p></td>
+    <td><p *ngFor="let dt of order?.paymentDetails.split(';')">{{dt}}</p></td>
   </tr>
   <tr>
     <th>Order Status:</th>
@@ -68,25 +68,6 @@
       </tr>
       </tbody>
     </table>
-    <mat-accordion>
-      <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Order changes
-          </mat-panel-title>
-          <mat-panel-description>
-
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <table class="table">
-          <tbody>
-          <tr *ngFor="let rdrst of orderStateChanges">
-            <td>{{rdrst}}</td>
-          </tr>
-          </tbody>
-        </table>
-      </mat-expansion-panel>
-    </mat-accordion>
     </div>
   <div class="col-lg-6">
     <p class="h3 ml-1 mt-1">Order items</p>

@@ -174,6 +174,7 @@ export class AddProductComponent implements OnInit, AfterViewInit {
     for (let i = 0; i < this.images.length; i++) {
       formData.append('images', this.images[i]);
     }
+    formData.append('enabled', String(this.rqst.enabled));
     formData.append('description', this.rqst.description);
     this.apiService.createProduct(formData).subscribe(
       res => {

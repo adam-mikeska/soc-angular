@@ -2,8 +2,7 @@
 <hr width="95%">
 <form #f="ngForm" (ngSubmit)="f.form.valid && lockUser(request)">
   <div class="form-group row">
-    <label class="col-3 col-form-label">Users</label>
-    <div class="col-8">
+    <div class="col-12">
       <mat-form-field>
         <mat-label>Users</mat-label>
         <div class="scrollable">
@@ -39,8 +38,7 @@
     </div>
   </div>
   <div class="form-group row">
-    <label for="lockTime" class="col-3 col-form-label">Block time</label>
-    <div class="col-3">
+    <div class="col-6">
       <mat-form-field class="w-100">
         <mat-label>Time(0 for unblock)</mat-label>
         <input [(ngModel)]="request.lockTime" matInput type="number"
@@ -56,7 +54,7 @@
         <mat-error *ngIf="lockTime.errors?.required">Time is required</mat-error>
       </mat-form-field>
     </div>
-    <div class="col-3">
+    <div class="col-6">
       <mat-form-field class="w-100">
         <mat-label>Time unit</mat-label>
         <mat-select id="timeUnit" name="timeUnit" #timeUnit="ngModel"

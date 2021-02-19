@@ -65,7 +65,7 @@ import {RolesComponent} from './admin/roles/roles.component';
 import {ProductsComponent} from './admin/products/products.component';
 import {OrdersComponent} from './admin/orders/orders.component';
 import {CategoriesComponent} from './admin/categories/categories.component';
-import {UiComponent} from './admin/ui/ui.component';
+import {DashboardComponent} from './admin/Dashboard/dashboard.component';
 import {CreateRoleDialogComponent} from './admin/roles/create-role-dialog/create-role-dialog.component';
 import {AsignRoleComponent} from './admin/users/asign-role/asign-role.component';
 import {CustomInterceptor} from './Service/custom.interceptor';
@@ -96,9 +96,10 @@ import { DiscountProductsComponent } from './admin/products/discount-products/di
 import { CreateCouponComponent } from './admin/coupons/create-coupon/create-coupon.component';
 import { SearchComponent } from './search/search.component';
 import {ColorPickerModule} from 'ngx-color-picker';
-import { AddCarouselComponent } from './admin/ui/add-carousel/add-carousel.component';
-import { AddAlertComponent } from './admin/ui/add-alert/add-alert.component';
+import { AddCarouselComponent } from './admin/Dashboard/add-carousel/add-carousel.component';
+import { AddAlertComponent } from './admin/Dashboard/add-alert/add-alert.component';
 import { FooterComponent } from './footer/footer.component';
+import { AddOrderItemComponent } from './admin/orders/manage-order/add-order-item/add-order-item.component';
 
 const appRoutes: Routes = [
 
@@ -134,7 +135,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'admin',
-    redirectTo: 'admin/users'
+    redirectTo: 'admin/dashboard'
   },
   {
     path: 'category',
@@ -154,7 +155,7 @@ const appRoutes: Routes = [
     children: [
       {path: 'users', component: UsersComponent, data : {comp: 'Admin/Users'}},
       {path: 'coupons', component: CouponsComponent, data : {comp: 'Admin/Coupons'}},
-      {path: 'others', component: UiComponent, data : {comp: 'Admin/Others'}},
+      {path: 'dashboard', component: DashboardComponent, data : {comp: 'Admin/Dashboard'}},
       {path: 'roles', component: RolesComponent, data : {comp: 'Admin/Roles'}},
       {path: 'brands', component: BrandsComponent, data : {comp: 'Admin/Brands'}},
       {path: 'categories', component: CategoriesComponent, data : {comp: 'Admin/Categories'}},
@@ -221,7 +222,7 @@ const appRoutes: Routes = [
     ProductsComponent,
     OrdersComponent,
     CategoriesComponent,
-    UiComponent,
+    DashboardComponent,
     IndexComponent,
     CreateRoleDialogComponent,
     AsignRoleComponent,
@@ -246,7 +247,8 @@ const appRoutes: Routes = [
     SearchComponent,
     AddCarouselComponent,
     AddAlertComponent,
-    FooterComponent
+    FooterComponent,
+    AddOrderItemComponent
   ],
   imports: [
     CKEditorModule,

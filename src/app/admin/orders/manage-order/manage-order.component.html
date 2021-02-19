@@ -1,7 +1,7 @@
 <p class="h2 text-center">Manage order</p>
 <hr>
 <div class="row">
-  <div class="col-lg-6">
+  <div class="col-lg-6 mb-4">
     <p class="h3 ml-0">Order details</p>
     <hr>
     <form #f="ngForm" (ngSubmit)="f.form.valid && updateOrder(rqst)">
@@ -125,13 +125,24 @@
           </mat-form-field>
         </div>
       </div>
-        <div class="text-center col ">
-          <button type="submit" mat-raised-button color="primary" [disabled]="!f.valid"><i class="fas fa-save mr-2"></i>Update order</button>
-        </div>
+      <div class="text-center col ">
+        <button type="submit" mat-raised-button color="primary" [disabled]="!f.valid"><i class="fas fa-save mr-2"></i>Update
+          order
+        </button>
+      </div>
     </form>
   </div>
   <div class="col-lg-6">
-    <p class="h3 ml-1">Order items</p>
+    <div class="row oi">
+      <div class="col-lg-10 col-sm-10 col-10 oi ">
+        <p class="h3 ml-1 ">Order items</p>
+      </div>
+      <div class="col-lg-1 col-sm-1 col-1 oi">
+        <button (click)="openDialogAddOrderItem()" mat-icon-button type="button" class="my-fab">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
     <hr>
     <div class="smlit">
       <div class="row cart-detail mb-1" *ngFor="let orderItem of data?.orderItems;let i=index">
@@ -178,7 +189,7 @@
             €/1</p>
         </div>
         <div class="col-lg-1 col-sm-1 col-1 cart-detail-product">
-          <button type="button" mat-icon-button class="ajaj"
+          <button type="button" mat-icon-button class="my-fab"
                   (click)="openDialogConfirmDeleteOrderItem(orderItem.id)">
             <mat-icon color="warn">close</mat-icon>
           </button>
@@ -198,7 +209,7 @@
       <div class="col-lg-4 col-sm-4 col-4 cart-detail-product1">
         <a>
           <span
-            class="price">  {{data?.cart_orderPayment?.price === 0 ? 'FREE' : (data?.cart_orderPayment?.price  | number : '1.2-2')+ ' €' }}</span>
+            class="price">  {{data?.cart_orderPayment?.price === 0 ? 'FREE' : (data?.cart_orderPayment?.price  | number : '1.2-2') + ' €' }}</span>
         </a>
       </div>
     </div>
@@ -248,7 +259,9 @@
                   <span
                     class="price">  {{((data?.totalPrice / 120) * 100  | number : '1.2-2') }} €</span>
           <br>
-          <span *ngIf="data?.coupon && data?.coupon.discountType==='PERCENTAGE' && data?.totalPrice>0 " class="price fr"> {{((((((data?.totalPrice/(100-data?.coupon.discount))*100)-((data?.cart_orderPayment.price/(100 - data?.coupon.discount)) * 100)-((data?.cart_orderDelivery.price/(100 - data?.coupon.discount)) * 100)+data?.cart_orderDelivery.price+data?.cart_orderPayment.price)/ 120)*100) | number : '1.2-2')+' €' }}</span>          <span *ngIf="data?.coupon && data?.coupon.discountType==='TOTAL' && data?.totalPrice>0 "
+          <span *ngIf="data?.coupon && data?.coupon.discountType==='PERCENTAGE' && data?.totalPrice>0 "
+                class="price fr"> {{((((((data?.totalPrice / (100 - data?.coupon.discount)) * 100) - ((data?.cart_orderPayment.price / (100 - data?.coupon.discount)) * 100) - ((data?.cart_orderDelivery.price / (100 - data?.coupon.discount)) * 100) + data?.cart_orderDelivery.price + data?.cart_orderPayment.price) / 120) * 100) | number : '1.2-2') + ' €' }}</span>
+          <span *ngIf="data?.coupon && data?.coupon.discountType==='TOTAL' && data?.totalPrice>0 "
                 class="price fr"> {{(((data?.totalPrice + data?.coupon.discount) / 120) * 100 | number : '1.2-2') + ' €' }}</span>
         </a>
       </div>
@@ -266,7 +279,7 @@
           <span class="price">  {{((data?.totalPrice)  | number : '1.2-2') }} €</span>
           <br>
           <span *ngIf="data?.coupon && data?.coupon.discountType==='PERCENTAGE' && data?.totalPrice>0"
-                class="price fr"> {{(((data?.totalPrice / (100 - data?.coupon.discount)) * 100)-((data?.cart_orderDelivery.price/(100 - data?.coupon.discount)) * 100)-((data?.cart_orderPayment.price/(100 - data?.coupon.discount)) * 100)+data?.cart_orderPayment.price+data?.cart_orderDelivery.price| number : '1.2-2') + ' €' }}</span>
+                class="price fr"> {{(((data?.totalPrice / (100 - data?.coupon.discount)) * 100) - ((data?.cart_orderDelivery.price / (100 - data?.coupon.discount)) * 100) - ((data?.cart_orderPayment.price / (100 - data?.coupon.discount)) * 100) + data?.cart_orderPayment.price + data?.cart_orderDelivery.price| number : '1.2-2') + ' €' }}</span>
           <span *ngIf="data?.coupon && data?.coupon.discountType==='TOTAL' && data?.totalPrice>0"
                 class="price fr"> {{((data?.totalPrice + data?.coupon.discount)  | number : '1.2-2') + ' €' }}</span>
         </a>

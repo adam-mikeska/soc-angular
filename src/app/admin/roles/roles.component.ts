@@ -44,7 +44,7 @@ export class RolesComponent implements OnInit {
     {name: 'Display coupons', permission: 'display_coupons'},
     {name: 'Create coupon', permission: 'create_coupon'},
     {name: 'Update coupon', permission: 'update_coupon'},
-    {name: 'Display others', permission: 'display_others'},
+    {name: 'Display dashboard', permission: 'display_dashboard'},
     {name: 'Add carousel', permission: 'add_carousel'},
     {name: 'Update carousel', permission: 'update_carousel'},
     {name: 'Delete carousel', permission: 'delete_carousel'},

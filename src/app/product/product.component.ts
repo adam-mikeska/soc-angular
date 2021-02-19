@@ -20,14 +20,14 @@ type AnimationState = 'animationStarted' | 'none';
       transition('* => animationStarted', [
         animate('1s', keyframes([
           style({transform: 'scale(1)',}),
-          style({transform: 'scale(1.1)'}),
+          style({transform: 'scale(1.05)'}),
           style({transform: 'scale(1)'})
         ]))
       ]),
       transition(':enter', [
         animate('1s', keyframes([
           style({transform: 'scale(1)',}),
-          style({transform: 'scale(1.1)'}),
+          style({transform: 'scale(1.05)'}),
           style({transform: 'scale(1)'})
         ]))
       ]),

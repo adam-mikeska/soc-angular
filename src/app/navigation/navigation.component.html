@@ -43,7 +43,7 @@
                 <img class="product-image"
                   [src]="apiUrl+'products/image/'+product.product.title+'/'+product.underTitle+'/'+product.productImages[0].image"
                      alt="">
-                {{ product.product.title + ' - ' + product.underTitle }}
+                {{ (product.product.brand ? product.product.brand.name : '' )+' '+ product.product.title + ' - ' + product.underTitle }}
               </mat-option>
             </ng-container>
             <ng-container *ngIf="products_categories_autocomplete_var.categories">

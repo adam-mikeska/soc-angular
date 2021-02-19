@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild, V
 import {ApiService} from '../Service/api.service';
 
 import {Router} from '@angular/router';
-import {Brand, Carousel, Product, ProductOption} from '../Models/Product';
+import {Brand, CarouselImage, Product, ProductOption} from '../Models/Product';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
@@ -14,7 +14,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 export class IndexComponent implements OnInit,AfterViewInit  {
 
   apiUrl=this.apiService.baseUrl;
-  carousel : Carousel[] = [];
+  carousel : CarouselImage[] = [];
   latestProducts: ProductOption[];
   discountedProducts: ProductOption[];
   mostPopularProducts :ProductOption[];

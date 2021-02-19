@@ -46,7 +46,7 @@ export class CheckoutComponent implements OnInit {
         this.paidFor= res.orderState!=='AWAITING_PAYMENT' && res?.cart_orderPayment.payment==='Paypal';
         if (this.order?.cart_orderPayment.payment === 'Online_bank_payment' && this.order.orderState !== 'COMPLETED' && this.order.orderState !== 'PAID') {
           this.handler = StripeCheckout.configure({
-            key: '',
+            key: 'pk_test_51HOmSmCebk3j5nxBGfaSwWigFtnmfMlxyURzrg5GaV0t6G7tgvWWRNnDPMWlVlduJZG05MfiUUDptwzx8DN3cPrD00drgQa3jO',
             image: environment.baseUrl+'api/image/img_avatar_male.png',
             locale: 'auto',
             name: 'E-Commerce',
@@ -88,6 +88,7 @@ export class CheckoutComponent implements OnInit {
             })
             .render(this.paypalElement.nativeElement);
         }
+
       }, error => {
         this.router.navigate(['/error']);
       }

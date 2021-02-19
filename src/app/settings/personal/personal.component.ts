@@ -17,7 +17,6 @@ export class PersonalComponent implements OnInit {
     'gender': '',
     'email': '',
     'telNumber': '',
-    'publicInfo': '',
     'country': '',
     'address': '',
     'postalCode': '',
@@ -87,7 +86,6 @@ export class PersonalComponent implements OnInit {
           this.request.name = res.name;
           this.request.gender = res.gender;
           this.request.telNumber = res.telNumber;
-          this.request.publicInfo = res.publicInfo;
           this.request.country = res.country;
           this.request.postalCode = res.postalCode;
           this.request.address = res.address;

@@ -11,19 +11,12 @@ import {environment} from '../../../../environments/environment';
 })
 export class OrderDetailsComponent implements OnInit {
 order: Order;
-orderStateChanges: string[];
-paymentDetails: string[];
 apiUrl=environment.baseUrl;
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,private apiService:ApiService) {
 
   }
   ngOnInit(): void {
     this.order=this.data;
-    this.order.orderChanges = this.order.orderChanges.split("{").join("").split("}").join("").split("_").join(" ");
-    this.orderStateChanges=this.order.orderChanges.split(" | ");
-    if(this.order.paymentDetails){
-      this.paymentDetails=this.order.paymentDetails.split(";");
-    }
   }
 
 }

@@ -36,6 +36,13 @@ export class adminGuard implements CanActivateChild {
     if (res.role?.permissions.includes('*')) {
       return true;
     }
+    if (state.url.includes('dashboard') && res.role?.permissions.includes('display_dashboard')) {
+      return true;
+    } else if (state.url.includes('dashboard') && !res.role?.permissions.includes('display_dashboard')) {
+      this.router.navigate([(this.checkIfCanBeRedirected(this.user, state.url) === 'none' ? '/' : this.checkIfCanBeRedirected(this.user, state.url))]);
+      return (this.checkIfCanBeRedirected(this.user, state.url) === 'none' ? false : true);
+    }
+
     if (state.url.includes('users') && res.role?.permissions.includes('display_users')) {
       return true;
     } else if (state.url.includes('users') && !res.role?.permissions.includes('display_users')) {
@@ -84,17 +91,13 @@ export class adminGuard implements CanActivateChild {
       return (this.checkIfCanBeRedirected(this.user, state.url) === 'none' ? false : true);
     }
 
-    if (state.url.includes('others') && res.role?.permissions.includes('display_others')) {
-      return true;
-    } else if (state.url.includes('others') && !res.role?.permissions.includes('display_others')) {
-      this.router.navigate([(this.checkIfCanBeRedirected(this.user, state.url) === 'none' ? '/' : this.checkIfCanBeRedirected(this.user, state.url))]);
-      return (this.checkIfCanBeRedirected(this.user, state.url) === 'none' ? false : true);
-    }
     return false;
   }
 
   checkIfCanBeRedirected(user: User, url: string) {
-    if (url === '/admin/users') {
+    if (url === '/admin/dashboard') {
+      return this.permissionsChecker(user);
+    } else if (url === '/admin/users') {
       return this.permissionsChecker(user);
     } else if (url === '/admin/orders') {
       return this.permissionsChecker(user);
@@ -108,13 +111,13 @@ export class adminGuard implements CanActivateChild {
       return this.permissionsChecker(user);
     } else if (url === '/admin/coupons') {
       return this.permissionsChecker(user);
-    }else if (url === '/admin/others') {
-      return this.permissionsChecker(user);
     }
   }
 
   permissionsChecker(user: User) {
-    if (user.role.permissions.includes('display_users')) {
+    if (user.role.permissions.includes('display_dashboard')) {
+      return '/admin/dashboard';
+    } else if (user.role.permissions.includes('display_users')) {
       return '/admin/users';
     } else if (user.role.permissions.includes('display_products')) {
       return '/admin/products';
@@ -128,9 +131,7 @@ export class adminGuard implements CanActivateChild {
       return '/admin/brands';
     } else if (user.role.permissions.includes('display_coupons')) {
       return '/admin/coupons';
-    }else if (user.role.permissions.includes('display_others')) {
-      return '/admin/coupons';
-    } else {
+    }else  {
       return 'none';
     }
   }

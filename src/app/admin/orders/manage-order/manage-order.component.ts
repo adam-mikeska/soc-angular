@@ -6,6 +6,7 @@ import {Order, OrderItem} from '../../../Models/User';
 import {ConfirmUpdateOrderitemComponent} from './confirm-update-orderitem/confirm-update-orderitem.component';
 import {ConfirmDeleteComponent} from '../../../confirm-delete/confirm-delete.component';
 import {environment} from '../../../../environments/environment';
+import {AddOrderItemComponent} from './add-order-item/add-order-item.component';
 
 @Component({
   selector: 'app-manage-order',
@@ -79,6 +80,22 @@ export class ManageOrderComponent implements OnInit,OnDestroy   {
           this.getOrder();
         }
       }
+    );
+  }
+
+  openDialogAddOrderItem(){
+    this.matDialog.open(AddOrderItemComponent, {
+      data: {
+        orderId:this.data.id
+      },
+      width: '800px',
+    }).afterClosed().subscribe(
+        res => {
+          if (res) {
+            this.rez=res;
+            this.getOrder();
+          }
+        }
     );
   }
 

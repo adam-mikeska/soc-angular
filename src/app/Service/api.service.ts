@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {Cart, Coupon, Order, Role, User} from '../Models/User';
 import {Observable, ReplaySubject, Subject} from 'rxjs';
@@ -7,8 +7,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {
   Alert,
   Brand,
-  Carousel,
-  Category,
+  CarouselImage,
+  Category, DashboardDTO,
   Delivery,
   Payment,
   Product,
@@ -98,20 +98,27 @@ export class ApiService {
   }
 
   public updateCartItem(productName, quantity, option, size) {
-    let params = new HttpParams();
-    params = params.set('product', productName);
-    params = params.set('quantity', quantity);
-    params = params.set('option', option);
-    params = params.set('size', size);
-    return this.httpClient.put(this.baseUrl + 'cart-item', params, {responseType: 'text' as 'json'});
+    let body = {
+      'product':productName,
+      'underTitle':option,
+      'size':size,
+      'quantity':quantity
+    }
+    return this.httpClient.put(this.baseUrl + 'cart-item', body, {responseType: 'text' as 'json'});
   }
 
   public deleteCartItem(productName, option, size) {
-    let params = new HttpParams();
-    params = params.set('product', productName);
-    params = params.set('option', option);
-    params = params.set('size', size);
-    return this.httpClient.delete(this.baseUrl + 'cart-item', {params: params, responseType: 'text' as 'json'});
+    let body = {
+      'product':productName,
+      'underTitle':option,
+      'size':size,
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }), body:body,responseType: 'text' as 'json'
+    };
+
+    return this.httpClient.delete(this.baseUrl + 'cart-item', httpOptions);
   }
 
   getCart() {
@@ -218,6 +225,10 @@ export class ApiService {
 
   //Orders//
 
+  public addOrderItem(id,request) {
+    return this.httpClient.post<string>(this.baseUrl + `admin/orders/${id}/order-items`, request, {responseType: 'text' as 'json'});
+  }
+
   public updateOrderItem(orderId,id, quantity) {
     let params = new HttpParams();
     params = params.set('quantity', quantity);
@@ -235,7 +246,7 @@ export class ApiService {
   public order(request, shouldUpdate) {
     let params = new HttpParams();
     params = params.set('update', shouldUpdate);
-    return this.httpClient.post<string>(this.baseUrl + 'order', request, {params: params, responseType: 'json' as 'json'});
+    return this.httpClient.post<string>(this.baseUrl + 'orders', request, {params: params, responseType: 'json' as 'json'});
   }
 
   public getOrders(page, size, direction, sortBy, search) {
@@ -256,26 +267,23 @@ export class ApiService {
 
 
   public checkoutStripe(request, orderId) {
-    let params = new HttpParams();
-    params = params.set('orderId', orderId);
-    return this.httpClient.post(this.baseUrl + 'checkout/stripe', request, {params: params, responseType: 'text' as 'json'});
+    return this.httpClient.post(this.baseUrl + `orders/${orderId}/checkout/stripe`, request, {responseType: 'text' as 'json'});
   }
 
   public create_order_paypal(orderId) {
-    let params = new HttpParams();
-    params = params.set('orderId', orderId);
-    return this.httpClient.post<any>(this.baseUrl + 'checkout/paypal/create',params,{responseType: 'text' as 'json'});
+    return this.httpClient.post<any>(this.baseUrl + `orders/${orderId}/checkout/paypal/create`, {}, {responseType: 'text' as 'json'});
   }
 
   public capture_order_paypal(orderId, paypalId) {
-    let params = new HttpParams();
-    params = params.set('orderId', orderId);
-    params = params.set('paypalId', paypalId);
-    return this.httpClient.get<any>(this.baseUrl + 'checkout/paypal/capture', {params: params, responseType: 'text' as 'json'});
+    return this.httpClient.get<any>(this.baseUrl + `orders/${orderId}/checkout/paypal/capture/${paypalId}`, { responseType: 'text' as 'json'});
   }
 
   public orderById(id) {
-    return this.httpClient.get<Order>(this.baseUrl + `order/${id}`, {responseType: 'json' as 'json'});
+    return this.httpClient.get<Order>(this.baseUrl + `orders/${id}`, {responseType: 'json' as 'json'});
+  }
+
+  public dashboardData() {
+    return this.httpClient.get<DashboardDTO>(this.baseUrl + 'admin/dashboard', {responseType: 'json' as 'json'});
   }
 
   public orderByIdAdmin(id) {
@@ -402,7 +410,6 @@ export class ApiService {
   }
 
   public deleteProductSize(productOptionId,id) {
-
     return this.httpClient.delete<string>(this.baseUrl + `admin/products/${productOptionId}/product-sizes/${id}`, {
       responseType: 'text' as 'json'
     });
@@ -465,8 +472,8 @@ export class ApiService {
     });
   }
 
-  public findAllProductOptions(title, option) {
-    return this.httpClient.get<ProductOption[]>(this.baseUrl + `products/${title}/${option}`, {
+  public findAllProductOptions(product, option) {
+    return this.httpClient.get<ProductOption[]>(this.baseUrl + `products/${product}/${option}`, {
       responseType: 'json' as 'json'
     });
   }
@@ -577,7 +584,7 @@ export class ApiService {
   }
 
   public getCarousel() {
-    return this.httpClient.get<Carousel[]>(this.baseUrl + 'products/carousel', {responseType: 'json' as 'json'});
+    return this.httpClient.get<CarouselImage[]>(this.baseUrl + 'products/carousel', {responseType: 'json' as 'json'});
   }
 
   public getAlerts() {
@@ -607,6 +614,8 @@ export class ApiService {
   public deleteAlert(id) {
     return this.httpClient.delete<string>(this.baseUrl + `admin/alerts/${id}`, {responseType: 'text' as 'json'});
   }
+
+
 
   public changePriceOfPayment(id,price) {
     let params = new HttpParams();

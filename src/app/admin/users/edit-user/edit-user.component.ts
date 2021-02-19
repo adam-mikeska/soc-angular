@@ -19,7 +19,6 @@ export class EditUserComponent implements OnInit {
     'postalCode': this.data.postalCode,
     'city': this.data.city,
     'gender': this.data.gender,
-    'publicInfo': this.data.publicInfo,
   };
   disabled: boolean = this.data.image.includes('img_avatar_female.png') || this.data.image.includes('img_avatar_male.png');
   selected = '';

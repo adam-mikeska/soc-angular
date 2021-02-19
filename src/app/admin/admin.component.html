@@ -5,6 +5,10 @@
     </button>
 
     <mat-nav-list>
+      <mat-list-item *ngIf="user.role?.permissions.includes('display_dashboard') || user.role?.permissions.includes('*')" [routerLink]="['/admin/dashboard']" [routerLinkActive]="['active']">
+        <mat-icon mat-list-icon>dashboard</mat-icon>
+        <h4 mat-line *ngIf="isExpanded">Dashboard</h4>
+      </mat-list-item>
       <mat-list-item *ngIf="user.role?.permissions.includes('display_users') || user.role?.permissions.includes('*') " [routerLink]="['/admin/users']" [routerLinkActive]="['active']">
         <mat-icon mat-list-icon>people</mat-icon>
         <h4 mat-line *ngIf="isExpanded">Users</h4>
@@ -32,10 +36,6 @@
       <mat-list-item *ngIf="user.role?.permissions.includes('display_categories') || user.role?.permissions.includes('*')" [routerLink]="['/admin/categories']" [routerLinkActive]="['active']">
         <mat-icon mat-list-icon>topic</mat-icon>
         <h4 mat-line *ngIf="isExpanded">Categories</h4>
-      </mat-list-item>
-      <mat-list-item *ngIf="user.role?.permissions.includes('display_others') || user.role?.permissions.includes('*')" [routerLink]="['/admin/others']" [routerLinkActive]="['active']">
-        <mat-icon mat-list-icon>personal_video</mat-icon>
-        <h4 mat-line *ngIf="isExpanded">Others</h4>
       </mat-list-item>
     </mat-nav-list>
   </mat-drawer>

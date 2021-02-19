@@ -125,6 +125,3 @@ a:hover img:first-child:not(:only-child) {
 .sorthdr{
   padding: 0px 15px 0px 15px;
 }
-::ng-deep .mat-autocomplete-panel {
-  max-height: 350px !important;
-}
